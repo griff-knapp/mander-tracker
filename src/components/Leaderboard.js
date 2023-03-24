@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,51 +10,47 @@ import Title from './Title';
 import { getGames, getUsers } from '../api/UserQueries';
 
 // Generate Order Data
-function createData(id, name, rank, winrate, mostPlayed) {
-  return { id, name, rank, winrate, mostPlayed };
-}
+// function createData(id, name, rank, winrate, mostPlayed) {
+//   return { id, name, rank, winrate, mostPlayed };
+// }
 
-const rows = [
-  createData(
-    0,
-    'Ray Flaks',
-    1,
-    '24 / 1',
-    'Gisath',
-  ),
-  createData(
-    1,
-    'Justin \'J-con\' Conwisar',
-    2,
-    '15 / 10',
-    'Nekusar',
-  ),
-  createData(
-    2,
-    'Griffin Knapp',
-    3,
-    '5 / 20',
-    'Jinnie Fay',
-  ),
-  createData(
-    3,
-    'Jacob Gyory',
-    4,
-    '3 / 22',
-    'Gates',
-  ),
-  createData(
-    4,
-    'Aidan \'Shitburger\' Denahy',
-    5,
-    '0 / 25',
-    'Kros',
-  ),
-];
-
-function preventDefault(event) {
-  event.preventDefault();
-}
+// const rows = [
+//   createData(
+//     0,
+//     'Ray Flaks',
+//     1,
+//     '24 / 1',
+//     'Gisath',
+//   ),
+//   createData(
+//     1,
+//     'Justin \'J-con\' Conwisar',
+//     2,
+//     '15 / 10',
+//     'Nekusar',
+//   ),
+//   createData(
+//     2,
+//     'Griffin Knapp',
+//     3,
+//     '5 / 20',
+//     'Jinnie Fay',
+//   ),
+//   createData(
+//     3,
+//     'Jacob Gyory',
+//     4,
+//     '3 / 22',
+//     'Gates',
+//   ),
+//   createData(
+//     4,
+//     'Aidan \'Shitburger\' Denahy',
+//     5,
+//     '0 / 25',
+//     'Kros',
+//   ),
+// ];
 
 export default function Leaderboard() {
   const [userData, setUserData] = useState([]);

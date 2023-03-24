@@ -1,5 +1,3 @@
-import Button from '@mui/material/Button';
-
 import { useHistory } from 'react-router';
 import { useAuth } from '../contexts/Auth';
 
@@ -15,14 +13,15 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
+// import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import Button from '@mui/material/Button';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
 
 import { useEffect, useState } from 'react';
 import Leaderboard from './Leaderboard';
@@ -209,8 +208,7 @@ export function Dashboard() {
                   sx={{
                     p: 2,
                     display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
+                    flexDirection: 'column'
                   }}
                 >
                   <GameContainer />
