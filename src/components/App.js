@@ -5,6 +5,7 @@ import { AuthProvider } from "../contexts/Auth";
 import { Signup } from "./Signup";
 import { Login } from "./Login";
 import { Dashboard } from "./Dashboard";
+import { PrivateRoute } from "./PrivateRoute";
 
 export function App() {
   return (
@@ -12,7 +13,8 @@ export function App() {
       <Router>
         <AuthProvider>
           <Switch>
-            <Route exact path="/" component={Dashboard} />
+            {/* <Route exact path="/" component={Dashboard} /> */}
+            <PrivateRoute exact path="/" component={Dashboard} />
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />          
           </Switch>

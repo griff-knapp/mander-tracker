@@ -3,6 +3,8 @@ import Button from '@mui/material/Button';
 import { useHistory } from 'react-router';
 import { useAuth } from '../contexts/Auth';
 
+import { getUsers } from '../api/UserQueries';
+
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -21,8 +23,10 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useState } from 'react';
+
+import { useEffect, useState } from 'react';
 import Leaderboard from './Leaderboard';
+import GameContainer from './GameContainer';
 
 function Copyright(props) {
   return (
@@ -88,6 +92,18 @@ const mdTheme = createTheme();
 export function Dashboard() {
   const { user, signOut } = useAuth();
   const [open, setOpen] = useState(false);
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    console.log('sup');
+    try {
+      const users = getUsers();
+      setUserData(users);
+      console.log(userData);
+    } catch(err) {
+      console.log(err);
+    }
+  },[]);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -102,10 +118,6 @@ export function Dashboard() {
   }
 
   return (
-    // <div>
-    //   <p>Welcome, {user?.email}</p>
-    //   <Button variant="contained" onClick={handleSignout}>Sign out</Button>
-    // </div>
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
@@ -201,7 +213,7 @@ export function Dashboard() {
                     height: 240,
                   }}
                 >
-                  {/* <Chart /> */}
+                  <GameContainer />
                 </Paper>
               </Grid>
               {/* Recent Deposits */}

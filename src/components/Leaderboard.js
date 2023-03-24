@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -6,6 +7,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
+import { getGames, getUsers } from '../api/UserQueries';
 
 // Generate Order Data
 function createData(id, name, rank, winrate, mostPlayed) {
@@ -55,6 +57,36 @@ function preventDefault(event) {
 }
 
 export default function Leaderboard() {
+  const [userData, setUserData] = useState([]);
+
+  useEffect(() => {
+    console.log('sup');
+    const getData = async () => {
+      try {
+        const users = await getUsers();
+        if (users) {
+          const formattedData = formatRows(users);
+          setUserData(formattedData);
+        }
+      } catch(err) {
+        console.log(err);
+      }
+    }
+    getData();
+    getGames();
+  },[]);
+
+  const formatRows = (rawData) => {
+    return rawData.map(row => {
+      return ({
+        id: row.id,
+        name: row.name,
+        rank: 1,
+        winrate: row.stats.winrate,
+        mostPlayed: row.stats.most_played
+      });
+    })
+  }
   return (
     <React.Fragment>
       <Title>Leaderboard</Title>
@@ -69,7 +101,7 @@ export default function Leaderboard() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {userData !== [] && userData.map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.rank}</TableCell>
               <TableCell>{row.name}</TableCell>
