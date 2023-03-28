@@ -13,6 +13,8 @@ import { faCrown } from '@fortawesome/free-solid-svg-icons';
 
 import { getGames, addGame } from "../api/UserQueries";
 
+import { useHistory } from 'react-router-dom';
+
 export default function GameContainer() {
     const [data, setData] = useState(null);
     const [page, setPage] = useState(1);
@@ -39,31 +41,37 @@ export default function GameContainer() {
         getData();
     },[]);
 
-    const handleAddGame = async () => {
-        // const gameObject = {
-        //     name: 'Test 4',
-        //     pcount: 1,
-        //     winner: 1,
-        //     duration: 2000,
-        //     fun: funMeter,
-        //     most_damage: mostDamage,
-        //     knockout_order: koOrder
-        // }
-        const userGameArray = [
-            {
-                user_ref: 1,
-                stats: {
-                    "death_source": null, 
-                    "salt_meter": null,
-                    "mana_flooded": false,
-                    "mana_screwed": false
-                }
-            }
-        ];
-        const response = await addGame('Test ' + Math.random(), 1, 1, 2000, null, null, Array(0), userGameArray);
-        console.log(response);
-        getData();
+    const history = useHistory();
+
+    const handleAddGame = () => {
+        history.push('/new-game');
     }
+
+    // const handleAddGame = async () => {
+    //     // const gameObject = {
+    //     //     name: 'Test 4',
+    //     //     pcount: 1,
+    //     //     winner: 1,
+    //     //     duration: 2000,
+    //     //     fun: funMeter,
+    //     //     most_damage: mostDamage,
+    //     //     knockout_order: koOrder
+    //     // }
+    //     const userGameArray = [
+    //         {
+    //             user_ref: 1,
+    //             stats: {
+    //                 "death_source": null, 
+    //                 "salt_meter": null,
+    //                 "mana_flooded": false,
+    //                 "mana_screwed": false
+    //             }
+    //         }
+    //     ];
+    //     const response = await addGame('Test ' + Math.random(), 1, 1, 2000, null, null, Array(0), userGameArray);
+    //     console.log(response);
+    //     getData();
+    // }
 
     const handleChangePage = (event, value) => {
         setPage(value);
@@ -111,7 +119,7 @@ export default function GameContainer() {
                     <Pagination count={data !== null ? Math.ceil(data.length/3) : 1} page={page} onChange={handleChangePage} color="primary" />
                 </Stack>
                 
-                
+                {/* <Link sx={{ marginTop: 2 }} variant="contained" color="primary" to="/new-game">+ Game</Link> */}
                 <Button sx={{ marginTop: 2 }} variant="contained" color="primary" onClick={handleAddGame}>+ Game</Button>
             </div>
             

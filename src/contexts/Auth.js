@@ -5,6 +5,7 @@ const AuthContext = React.createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
+  const [session, setSession] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -13,6 +14,7 @@ export function AuthProvider({ children }) {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+      setSession(session);
       return session;
     }
     
@@ -37,6 +39,7 @@ export function AuthProvider({ children }) {
     signIn: async (data) => await supabase.auth.signInWithPassword(data),
     signOut: () => supabase.auth.signOut(),
     user,
+    session,
   };
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>

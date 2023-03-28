@@ -10,7 +10,7 @@ export async function getUsers() {
 
 export async function getGames() {
     const { data: gameArray, error } = await supabase
-        .from('getgames')
+        .from('getgamelist')
         .select('*');
     // console.log(gameArray);
     return gameArray;
