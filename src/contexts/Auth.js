@@ -5,7 +5,7 @@ const AuthContext = React.createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
-  const [session, setSession] = useState(sessionStorage.getItem('session'));
+  const [session, setSession] = useState(localStorage.getItem('session'));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
         data: { session },
       } = await supabase.auth.getSession();
       setSession(session);
-      sessionStorage.setItem('session', session);
+      localStorage.setItem('session', session);
       return session;
     }
 
@@ -28,11 +28,12 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // Listen for changed on auth state
-    const { data: listener } = supabase.auth.onAuthStateChange(async (event, _session) => {
+    // console.log(session);
+    const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
       // setUser(session?.user ?? null);
       // console.log(session);
       // console.log(`Supbase auth event: ${event}`);
-      setSession(_session);
+      setSession(session);
       setLoading(false);
     });
 

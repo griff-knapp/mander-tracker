@@ -32,12 +32,16 @@ const theme = createTheme();
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { user } = useAuth();
-  console.log(user);
+  const { session } = useAuth();
+  // console.log(user);
   const { signIn } = useAuth();
 
   const history = useHistory();
 
+  if (session) {
+    history.push('/');
+  }
+  
   const handleSubmit = async (e) => {
     // stuff
     e.preventDefault();
