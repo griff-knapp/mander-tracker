@@ -7,24 +7,12 @@ import MenuItem from '@mui/material/MenuItem';
 import { Button, Container, Grid, Paper, Toolbar } from "@mui/material";
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
-import Chip from '@mui/material/Chip';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
+// import Checkbox from '@mui/material/Checkbox';
 
-import Select from 'react-select';
-
-import { addGame, getUsers } from "../api/UserQueries";
-
-const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-];
+import { addGame, getUsers } from "../../api/UserQueries";
+import { GameDetail } from "./GameDetail";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -41,15 +29,11 @@ export function CreateGame() {
     const [gameName, setGameName] = useState('');
     const [playerData, setPlayerData] = useState([]);
     const [playerItems, setPlayerItems] = useState([]);
-    const [duration, setDuration] = useState(0);
-    const [funRating, setFunRating] = useState(null);
+    // const [duration, setDuration] = useState(0);
+    const [funRating, setFunRating] = useState(0);
     const [winner, setWinner] = useState('');
 
     const history = useHistory();
-
-    const handleAddGame = () => {
-        
-    }
 
     useEffect(() => {
         console.log('sup');
@@ -77,9 +61,19 @@ export function CreateGame() {
 
         const playerCount = playerItems.length;
         const winnerPlayer = playerData.find(player => player.name === winner).id;
-        const userGameArray = playerData.map(player => {
+        const userGameArray = playerItems.map(player => {
+            let playerId = null;
+            for (const playerInfo in playerData) {
+                console.log(playerInfo)
+                if (playerData[playerInfo].name === player) {
+                    playerId = playerData[playerInfo].id;
+                }
+            }
+
+            console.log(playerId);
+
             return {
-                user_ref: player.id,
+                user_ref: playerId,
                 stats: {
                     "death_source": null, 
                     "salt_meter": null,
@@ -89,10 +83,10 @@ export function CreateGame() {
             }
         });
 
-        console.log(winnerPlayer);
+        console.log(userGameArray);
 
         try {
-            const response = await addGame(gameName, playerCount, winnerPlayer, 3600, null, null, Array(0), userGameArray);
+            const response = await addGame(gameName, playerCount, winnerPlayer, 3600, funRating, null, Array(0), userGameArray);
             console.log(response);
             history.push('/');
         } catch (err) {
@@ -114,9 +108,9 @@ export function CreateGame() {
           }}
         >
             <Toolbar />
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4, display: 'flex', flexWrap: 'wrap' }}>
                 <Grid container spacing={3}>
-                    <Grid item xs={12}>
+                    <Grid item xs={6}>
                         <Paper
                             sx={{
                                 p: 2,
@@ -136,16 +130,15 @@ export function CreateGame() {
                                 <Grid container spacing={2.5}>
                                     <Grid item xs={12}>
                                         <TextField
-                                            required
                                             id="outlined-name"
                                             label="Name"
                                             value={gameName}
+                                            // inputProps={{ maxlength: '19' }}
                                             onChange={(e) => setGameName(e.target.value)}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
-                                            required
                                             id="outlined-players"
                                             select
                                             SelectProps={{
@@ -173,7 +166,6 @@ export function CreateGame() {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
-                                                required
                                                 id="outlined-players"
                                                 select
                                                 SelectProps={{
@@ -194,10 +186,21 @@ export function CreateGame() {
                                             ))}
                                         </TextField>
                                     </Grid>
+                                    <Grid item sx={{ marginLeft: 1 }} xs={12}>
+                                        <Typography component="legend">Fun Rating</Typography>        
+                                        <Rating 
+                                            value={funRating}
+                                            precision={0.5}
+                                            onChange={(e) => setFunRating(e.target.value)}
+                                        />
+                                    </Grid>
                                 </Grid>
                                 <Button sx={{ marginTop: 2, marginLeft: 1 }} variant="contained" color="primary" type="submit">Submit</Button>
                             </Box>
                         </Paper>
+                    </Grid>
+                    <Grid item xs={6} >
+                        <GameDetail gameName={gameName} playerArray={playerItems.map(player => ({info: {name: player}, stats: {}}))} funRating={funRating} winner={winner} />
                     </Grid>
                 </Grid>
             </Container>

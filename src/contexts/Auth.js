@@ -5,7 +5,7 @@ const AuthContext = React.createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
-  const [session, setSession] = useState();
+  const [session, setSession] = useState(sessionStorage.getItem('session'));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,24 +15,31 @@ export function AuthProvider({ children }) {
         data: { session },
       } = await supabase.auth.getSession();
       setSession(session);
+      sessionStorage.setItem('session', session);
       return session;
     }
-    
-    const session = retreiveSession();
-    
-    setUser(session?.user ?? null);
-    setLoading(false);
 
+    // console.log(session);
+    const sesh = retreiveSession();
+
+    setUser(sesh?.user ?? null);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
     // Listen for changed on auth state
-    const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setUser(session?.user ?? null);
+    const { data: listener } = supabase.auth.onAuthStateChange(async (event, _session) => {
+      // setUser(session?.user ?? null);
+      // console.log(session);
+      // console.log(`Supbase auth event: ${event}`);
+      setSession(_session);
       setLoading(false);
     });
 
     return () => {
-      supabase.removeChannel(listener);
+      listener.subscription.unsubscribe();
     }
-  }, []);
+  },[]);
 
   const value = {
     signUp: (data) => supabase.auth.signUp(data),

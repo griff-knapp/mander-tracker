@@ -1,4 +1,4 @@
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -61,7 +61,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   );
 
 export function Navbar() {
-    const { user, signOut } = useAuth();
+    const { signOut, session } = useAuth();
     const [open, setOpen] = useState(false);
     const history = useHistory();
     
@@ -75,7 +75,7 @@ export function Navbar() {
     }
     
     // if user is not signed in dont show navbar
-    if (user === null) {
+    if (session === null) {
         return null;
     }
 
@@ -116,7 +116,7 @@ export function Navbar() {
                     edge="end"
                     sx={{ flexGrow: 1 }}
                 >
-                    {user !== null && user.email}
+                    {session !== null && session.user !== undefined && session.user.email}
                 </Typography>
                 <Button variant="contained" color="warning" onClick={handleSignout}>Sign out</Button>
                 </div>
