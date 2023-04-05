@@ -12,7 +12,8 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import { addUser } from '../api/UserQueries';
 
 function Copyright(props) {
   return (
@@ -27,9 +28,10 @@ function Copyright(props) {
   );
 }
 
-const theme = createTheme();
+// const theme = createTheme();
 
 export function Signup() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -41,7 +43,8 @@ export function Signup() {
     // stuff
     e.preventDefault();
     const { error } = await signUp({ email, password });
-
+    const response = await addUser(name, email);
+    console.log(response);
     if (error) { 
       alert('error signing in');
       console.log(error);
@@ -51,7 +54,7 @@ export function Signup() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -86,11 +89,22 @@ export function Signup() {
                 margin="normal"
                 required
                 fullWidth
+                id="name"
+                label="Name"
+                name="name"
+                autoComplete="name"
+                autoFocus
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                autoFocus
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -113,6 +127,7 @@ export function Signup() {
                 type="submit"
                 fullWidth
                 variant="contained"
+                color="secondary"
                 sx={{ mt: 3, mb: 2 }}
                 disabled={password === '' || email === ''}
                 onClick={handleSubmit}

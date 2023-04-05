@@ -12,7 +12,7 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 
 function Copyright(props) {
   return (
@@ -27,7 +27,7 @@ function Copyright(props) {
   );
 }
 
-const theme = createTheme();
+// const theme = createTheme();
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -56,7 +56,7 @@ export function Login() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -67,8 +67,6 @@ export function Login() {
           sx={{
             backgroundImage: 'url(https://source.unsplash.com/random)',
             backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
@@ -110,14 +108,11 @@ export function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {/* <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              /> */}
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
+                color="secondary"
                 sx={{ mt: 3, mb: 2 }}
                 disabled={password === '' || email === ''}
                 onClick={handleSubmit}

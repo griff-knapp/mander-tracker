@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
 
 export function GameDetail(props) {
-    console.log(props);
+    // console.log(props);
     const { gameName, playerArray, funRating, winner } = props;
     return (
         <Paper 
@@ -32,13 +32,13 @@ export function GameDetail(props) {
                         <Typography variant="h5" sx={{ fontWeight: 'bold', overflowWrap: 'break-word' }}>{gameName}</Typography>
                     </Grid>
                     <Grid item xs={7} zeroMinWidth>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'grey' }}>12/19/2022</Typography>
+                        <Typography variant="subtitle1" sx={{ display: 'flex', justifyContent: 'end', fontWeight: 'bold' }}>12/19/2022</Typography>
                     </Grid>
                     <Grid item xs={12} zeroMinWidth>
                         <Typography component="legend">Players:</Typography>  
                         <List sx={{ bgcolor: 'background.paper', width: '100%' }}>
                             {playerArray !== undefined && playerArray.map(player => (
-                                <ListItem sx={{ justifyContent: 'flex-start', p: 0, ml: 1 }}>
+                                <ListItem key={player.info.name} sx={{ justifyContent: 'flex-start', p: 0, ml: 1 }}>
                                     <ListItemAvatar>
                                         {winner === player.info.name && 
                                             <FontAwesomeIcon style={{ color: 'gold', position: 'absolute', zIndex: '10000', bottom: 40 }} icon={faCrown} />

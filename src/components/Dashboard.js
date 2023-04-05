@@ -24,27 +24,14 @@ function Copyright(props) {
 }
 
 export function Dashboard() {
-  // const [userData, setUserData] = useState(null);
-
-  // useEffect(() => {
-  //   console.log('sup');
-  //   try {
-  //     const users = getUsers(); 
-  //     setUserData(users);
-  //     // console.log(userData);
-  //   } catch(err) {
-  //     console.log(err);
-  //   }
-  // },[]);
-
   return (
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
+            // backgroundColor: (theme) =>
+            //   theme.palette.mode === 'dark'
+            //     ? theme.palette.primary
+            //     : '#0B2447',
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
@@ -55,6 +42,7 @@ export function Dashboard() {
             <Grid container spacing={3}>
               {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>
+                <Typography variant='h5' sx={{ mb: 0.5 }}>Games</Typography>
                 <Paper
                   sx={{
                     p: 2,
@@ -67,6 +55,7 @@ export function Dashboard() {
               </Grid>
               {/* Recent Deposits */}
               <Grid item xs={12} md={4} lg={3}>
+                <Typography variant='h5' sx={{ mb: 0.5 }}>Grand Champ</Typography>
                 <Paper
                   sx={{
                     p: 2,
@@ -80,9 +69,10 @@ export function Dashboard() {
               </Grid>
               {/* Recent Orders */}
               <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <Typography variant='h5' sx={{ mb: 0.5 }}>Leaderboard</Typography>
+                {/* <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}> */}
                   <Leaderboard />
-                </Paper>
+                {/* </Paper> */}
               </Grid>
             </Grid>
             <Copyright sx={{ pt: 4 }} />

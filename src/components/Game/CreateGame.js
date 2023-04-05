@@ -36,12 +36,12 @@ export function CreateGame() {
     const history = useHistory();
 
     useEffect(() => {
-        console.log('sup');
+        // console.log('sup');
         const getData = async () => {
           try {
             const users = await getUsers();
             if (users) {
-              console.log(users);
+            //   console.log(users);
               setPlayerData(users.map(user => {
                 return {
                     name: user.name,
@@ -98,10 +98,6 @@ export function CreateGame() {
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
@@ -110,7 +106,7 @@ export function CreateGame() {
             <Toolbar />
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4, display: 'flex', flexWrap: 'wrap' }}>
                 <Grid container spacing={3}>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <Paper
                             sx={{
                                 p: 2,
@@ -152,7 +148,7 @@ export function CreateGame() {
                                                 const {
                                                     target: { value },
                                                   } = e;
-                                                console.log(value);
+                                                // console.log(value);
                                                 setPlayerItems(typeof value === 'string' ? value.split(',') : value,);
                                             }}
                                         >
@@ -175,7 +171,7 @@ export function CreateGame() {
                                                 label={playerItems.length === 0 ? "Select players for your game" : "Winner"}
                                                 value={winner}
                                                 onChange={(e) => {
-                                                    console.log(playerItems);
+                                                    // console.log(playerItems);
                                                     setWinner(e.target.value);
                                                 }}
                                         >
@@ -195,11 +191,11 @@ export function CreateGame() {
                                         />
                                     </Grid>
                                 </Grid>
-                                <Button sx={{ marginTop: 2, marginLeft: 1 }} variant="contained" color="primary" type="submit">Submit</Button>
+                                <Button sx={{ marginTop: 2, marginLeft: 1 }} variant="contained" color="secondary" type="submit">Submit</Button>
                             </Box>
                         </Paper>
                     </Grid>
-                    <Grid item xs={6} >
+                    <Grid item xs={12} md={6}>
                         <GameDetail gameName={gameName} playerArray={playerItems.map(player => ({info: {name: player}, stats: {}}))} funRating={funRating} winner={winner} />
                     </Grid>
                 </Grid>

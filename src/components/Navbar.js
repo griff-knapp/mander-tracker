@@ -79,6 +79,11 @@ export function Navbar() {
         return null;
     }
 
+    const handleAddDeck = () => {
+      console.log('deck added!');
+      history.push('/new-deck');
+    }
+
     return (
         <>
         <AppBar position="absolute" open={open}>
@@ -109,16 +114,17 @@ export function Navbar() {
                     <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>Post Combat</Link>
                 </Typography>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }} >
-                <Typography
-                    component="h4"
-                    color="inherit"
-                    noWrap
-                    edge="end"
-                    sx={{ flexGrow: 1 }}
-                >
-                    {session !== null && session.user !== undefined && session.user.email}
-                </Typography>
-                <Button variant="contained" color="warning" onClick={handleSignout}>Sign out</Button>
+                  <Typography
+                      component="h4"
+                      color="inherit"
+                      noWrap
+                      edge="end"
+                      sx={{ flexGrow: 1 }}
+                  >
+                      {session !== null && session.user !== undefined && session.user.email}
+                  </Typography>
+                  <Button variant="contained" color="secondary" onClick={handleAddDeck}>+ Deck</Button>
+                  <Button variant="outlined" color="secondary" onClick={handleSignout}>Sign out</Button>
                 </div>
             
                 {/* <IconButton color="inherit">

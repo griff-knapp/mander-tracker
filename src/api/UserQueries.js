@@ -43,7 +43,7 @@ export async function getGame(uuid) {
 }
 
 export async function addGame(name, pcount, winner, duration, fun=null, most_damage=null, knockout_order=Array(0), userGameArray) {
-    const { data, error } = await supabase
+    let { data, error } = await supabase
         .from('game')
         .insert({ 
             name: name,
@@ -75,9 +75,48 @@ export async function addGame(name, pcount, winner, duration, fun=null, most_dam
             console.log(error);
         }
     });
-    // const { error2 } = await supabase
-    //     .from('user_game')
-    //     .insert({
 
-    //     })
+    const winrateResponse = await supabase
+        .from('user')
+        .select('stats')
+        .eq('id', winner);
+
+    const updateJson = {
+        stats: {
+            ...winrateResponse.data[0].stats,
+            'winrate': winrateResponse.data[0].stats.winrate + 1 
+        }
+    };
+
+    const updateWinrateResponse = await supabase
+        .from('user')
+        .update(updateJson)
+        .eq('id', winner)
+        .select('*');
+
+    if (updateWinrateResponse.error) {
+        console.log(updateWinrateResponse.error);
+    }
+}
+
+export async function addUser(name, email) {
+    const { data, error } = await supabase
+        .from('user')
+        .insert({ name: name, email: email, stats: { winrate: 0 } })
+        .select();
+    
+    if (error) console.log(error);
+
+    return data;
+}
+
+export async function addDeck(name) {
+    const { data, error } = await supabase
+        .from('deck')
+        .insert({ name: name, commander: name })
+        .select();
+    
+    if (error) console.log(error);
+
+    return data;
 }

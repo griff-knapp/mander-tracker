@@ -143,9 +143,9 @@ export default function GameContainer() {
             }
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Stack spacing={2} sx={{ marginTop: 2 }}>
-                    <Pagination count={data !== null ? Math.ceil(data.length/3) : 1} page={page} onChange={handleChangePage} color="primary" />
+                    <Pagination count={data !== null ? Math.ceil(data.length/3) : 1} page={page} onChange={handleChangePage} />
                 </Stack>
-                <Button sx={{ marginTop: 2 }} variant="contained" color="primary" onClick={handleAddGame}>+ Game</Button>
+                <Button sx={{ marginTop: 2 }} variant='contained' color="secondary" onClick={handleAddGame}>+ Game</Button>
             </div>
         </>
             
