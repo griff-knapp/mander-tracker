@@ -8,7 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableContainer from '@mui/material/TableContainer';
-import { Button, Container, Grid, Paper, Toolbar, Box } from "@mui/material";
+import { Container, Grid, Paper, Toolbar, Box } from "@mui/material";
 
 
 
@@ -64,7 +64,7 @@ export function Decklist() {
                                                 <TableCell sx={{ borderColor: '#102A43', fontSize: '1em' }}>Name</TableCell>
                                                 <TableCell sx={{ borderColor: '#102A43', fontSize: '1em' }}>Commander</TableCell>
                                                 <TableCell sx={{ borderColor: '#102A43', fontSize: '1em' }} align="right">Date Added</TableCell>
-                                            </TableRow>
+                                            </TableRow> 
                                         </TableHead>
                                         <TableBody>
                                             {decklist !== null && decklist.map(deck => (

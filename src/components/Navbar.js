@@ -8,7 +8,6 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import Button from '@mui/material/Button';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
@@ -85,27 +84,27 @@ export function Navbar() {
         setOpen(!open);
     };
       
-    const handleSignout = async () => {
-        await signOut();
-        history.push('/login');
-    }
+    // const handleSignout = async () => {
+    //     await signOut();
+    //     history.push('/login');
+    // }
     
     // if user is not signed in dont show navbar
     if (session === null) {
         return null;
     }
 
-    const handleAddDeck = () => {
-      console.log('deck added!');
-      history.push('/new-deck');
-    }
+    // const handleAddDeck = () => {
+    //   console.log('deck added!');
+    //   history.push('/new-deck');
+    // }
 
     const actions = [
       {
         icon: <ViewCarouselIcon />,
         name: 'View Decks',
         handleClick: () => {
-          history.push('/decklist')
+          history.push('/decklist');
         }
       },
       { 
