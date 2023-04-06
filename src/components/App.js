@@ -15,6 +15,8 @@ import Box from '@mui/material/Box';
 import { Navbar } from "./Navbar";
 import { DetailContainer } from "./Game/DetailContainer";
 import { CreateDeck } from "./Deck/CreateDeck";
+import { useEffect, createContext } from "react";
+import { Decklist } from "./Deck/Decklist";
 
 const mdTheme = createTheme({
   palette: {
@@ -45,6 +47,7 @@ export function App() {
                 <Route path="/new-game" component={CreateGame}/>
                 <Route path="/game:uuid?" component={DetailContainer} />
                 <Route path="/new-deck" component={CreateDeck} />
+                <Route path="/decklist" component={Decklist} />
               </Switch>
             </Box>
           </ThemeProvider>

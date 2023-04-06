@@ -9,6 +9,9 @@ import Link from '@mui/material/Link';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 import Leaderboard from './Leaderboard';
 import GameContainer from './GameContainer';
+import { useAuth } from '../contexts/Auth';
+import { createContext, useEffect } from 'react';
+import { getUser } from '../api/UserQueries';
 
 function Copyright(props) {
   return (
@@ -24,6 +27,10 @@ function Copyright(props) {
 }
 
 export function Dashboard() {
+  const { user } = useAuth();
+
+  console.log(user);
+
   return (
         <Box
           component="main"

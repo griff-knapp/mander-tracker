@@ -3,7 +3,20 @@ const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.RE
 
 export async function getUsers() {
     // console.log(supabase);
-    const { data: user, error } = await supabase.from('user').select();
+    const { data: user, error } = await supabase
+        .from('getusers')
+        .select(`*`);
+    if (error) console.log(error);
+    console.log(user);
+    return user;
+}
+
+export async function getUser(email) {
+    const { data: user, error } = await supabase
+        .from('user')
+        .select('*')
+        .eq('email', email);
+    
     if (error) console.log(error);
 
     return user;
@@ -110,10 +123,21 @@ export async function addUser(name, email) {
     return data;
 }
 
-export async function addDeck(name) {
+export async function getDecklist(id) {
+    const { data: decklist, error } = await supabase
+        .from('deck')
+        .select('name, commander, created_at')
+        .eq('user_ref', id);
+    
+    if (error) console.log(error);
+
+    return decklist;
+}
+
+export async function addDeck(name, commander, id) {
     const { data, error } = await supabase
         .from('deck')
-        .insert({ name: name, commander: name })
+        .insert({ name: name, commander: commander, user_ref: id })
         .select();
     
     if (error) console.log(error);

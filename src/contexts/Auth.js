@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { supabase } from '../supabase';
+import { getUser } from "../api/UserQueries";
 
 const AuthContext = React.createContext();
 
@@ -16,6 +17,8 @@ export function AuthProvider({ children }) {
       } = await supabase.auth.getSession();
       setSession(session);
       localStorage.setItem('session', session);
+      const userData = await getUser(session.user.email);
+      setUser(userData[0]);
       return session;
     }
 

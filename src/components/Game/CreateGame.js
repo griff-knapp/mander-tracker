@@ -41,11 +41,12 @@ export function CreateGame() {
           try {
             const users = await getUsers();
             if (users) {
-            //   console.log(users);
+              console.log(users);
               setPlayerData(users.map(user => {
                 return {
                     name: user.name,
-                    id: user.id
+                    id: user.id,
+                    decklist: user.decklist
                 };
               }));
             }
@@ -196,7 +197,7 @@ export function CreateGame() {
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <GameDetail gameName={gameName} playerArray={playerItems.map(player => ({info: {name: player}, stats: {}}))} funRating={funRating} winner={winner} />
+                        <GameDetail gameName={gameName} playerArray={playerData.filter(player => playerItems.filter(player2 => player2 === player.name).length > 0).map(player3 => ({info: {name: player3.name, id: player3.id, decklist: player3.decklist}, stats: {}}))} funRating={funRating} winner={winner} />
                     </Grid>
                 </Grid>
             </Container>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 
 import { useAuth } from '../contexts/Auth';
@@ -32,9 +32,13 @@ function Copyright(props) {
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { session } = useAuth();
+  const { session, signIn } = useAuth();
   // console.log(user);
-  const { signIn } = useAuth();
+  // const { signIn } = useAuth();
+
+  // useEffect(() => {
+
+  // },[]);
 
   const history = useHistory();
 

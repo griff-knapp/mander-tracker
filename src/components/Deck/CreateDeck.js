@@ -4,26 +4,16 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button, Container, Grid, Paper, Toolbar } from "@mui/material";
 import { addDeck } from "../../api/UserQueries";
-// import { useAuth } from "../../contexts/Auth";
-
-// import Checkbox from '@mui/material/Checkbox';
-
-// const ITEM_HEIGHT = 48;
-// const ITEM_PADDING_TOP = 8;
-
-// const MenuProps = {
-//     PaperProps: {
-//         style: {
-//         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-//         },
-//     },
-// };
+import { useAuth } from "../../contexts/Auth";
+import { useHistory } from "react-router-dom";
 
 export function CreateDeck() {
     const [deckName, setDeckName] = useState('');
+    const [commander, setCommander] = useState('');
     // const [commanderOptions, setCommanderOptions] = useState([]);
-    // const { session } = useAuth();
-    
+    const { user } = useAuth();
+    const history = useHistory();
+
     // useEffect(() => {
     //     console.log(session);
     //     const getInitialCardData = async() => {
@@ -44,8 +34,8 @@ export function CreateDeck() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await addDeck(deckName);
-
+        const response = await addDeck(deckName, commander, user.id);
+        history.push('/decklist');
         console.log(response);
     }
 
@@ -113,10 +103,17 @@ export function CreateDeck() {
                                     <Grid item xs={12}>
                                         <TextField
                                             id="outlined-name"
-                                            label="Commander"
+                                            label="Name"
                                             value={deckName}
                                             // inputProps={{ maxlength: '19' }}
                                             onChange={(e) => setDeckName(e.target.value)}
+                                        />
+                                        <TextField
+                                            id="outlined-name"
+                                            label="Commander"
+                                            value={commander}
+                                            // inputProps={{ maxlength: '19' }}
+                                            onChange={(e) => setCommander(e.target.value)}
                                         />
                                         {/* <Autocomplete
                                             disablePortal
