@@ -17,8 +17,11 @@ export function AuthProvider({ children }) {
       } = await supabase.auth.getSession();
       setSession(session);
       localStorage.setItem('session', session);
-      const userData = await getUser(session !== null ? session.user.email : null);
-      setUser(userData[0]);
+      console.log(session);
+      if (session !== null) {
+        const userData = await getUser(session.user.email);
+        setUser(userData[0]);
+      }
       return session;
     }
 
@@ -37,8 +40,10 @@ export function AuthProvider({ children }) {
       // console.log(session);
       // console.log(`Supbase auth event: ${event}`);
       setSession(session);
-      const userData = await getUser(session !== null ? session.user.email : null);
-      setUser(userData[0]);
+      if (session !== null) {
+        const userData = await getUser(session.user.email);
+        setUser(userData[0]);
+      }
       setLoading(false);
     });
 

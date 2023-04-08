@@ -1,7 +1,7 @@
 import Paper from "@mui/material/Paper";
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { Box } from "@mui/material";
+import { Box, Select } from "@mui/material";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 // import ListItemText from '@mui/material/ListItemText';
@@ -9,26 +9,59 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Rating from '@mui/material/Rating';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
+// import Button from '@mui/material/Button';
+// import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+// import TextField from '@mui/material/TextField';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { setGameDecks } from "../../api/UserQueries";
+
+// const ITEM_HEIGHT = 48;
+// const ITEM_PADDING_TOP = 8;
+
+// const MenuProps = {
+//     PaperProps: {
+//         style: {
+//         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+//         },
+//     },
+// };
 
 export function GameDetail(props) {
-    const { gameName, playerArray, funRating, winner } = props;
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const { gameName, gameID, playerArray, funRating, winner } = props;
+    const [playerDecks, setPlayerDecks] = useState({});
+    // const [anchorEl, setAnchorEl] = useState(null);
+    // const open = Boolean(anchorEl);
+
+    useEffect(() => {
+        playerArray.forEach(player => {
+            
+            setPlayerDecks(prev => ({...prev, [player.info.id]: player.info.decklist.find(deck => deck.did_play === true)?.name || '' }))
+        });
+        // console.log(playerDecks);
+    },[playerArray]);
+
+    // const handleClick = (event) => {
+    //     setAnchorEl(event.currentTarget);
+    // };
+    // const handleClose = () => {
+    //     setAnchorEl(null);
+    // };
     
-    console.log(playerArray);
+    console.log(gameName);
+
+    const handleSubmit = async (e, id) => {
+        e.preventDefault();
+        console.log(gameID);
+        const submitDecks = {...playerDecks, [`${id}`]: e.target.value};
+        setPlayerDecks(submitDecks);
+        try {
+            await setGameDecks(submitDecks, gameID);
+        } catch(err) { console.log(err) }
+    }
 
     return (
         <Paper 
@@ -49,23 +82,72 @@ export function GameDetail(props) {
                         <Typography variant="subtitle1" sx={{ display: 'flex', justifyContent: 'end', fontWeight: 'bold' }}>12/19/2022</Typography>
                     </Grid>
                     <Grid item xs={12} zeroMinWidth>
-                        <Typography component="legend">Players:</Typography>  
+                        <Typography component="legend">Players:</Typography>
+                        <Box
+                            component="form"
+                            noValidate
+                            autoComplete="off"
+                            onSubmit={handleSubmit}
+                        >
                         <List sx={{ bgcolor: 'background.paper', width: '100%' }}>
-                            {playerArray !== undefined && playerArray.map(player => (
-                                <ListItem key={player.info.name} sx={{ justifyContent: 'flex-start', p: 0, ml: 1 }}>
+                            {playerArray !== undefined && Object.keys(playerDecks).length !== 0 && playerArray.map(player => (
+                                <ListItem key={player.info.name} sx={{ justifyContent: 'flex-start', p: 0, ml: 1, width: '100%', alignItems: 'start', mb: 1.5 }}>
                                     <ListItemAvatar>
                                         {winner === player.info.name && 
-                                            <FontAwesomeIcon style={{ color: 'gold', position: 'absolute', zIndex: '10000', bottom: 40 }} icon={faCrown} />
+                                            <FontAwesomeIcon style={{ color: 'gold', position: 'absolute', zIndex: '10000', bottom: 80 }} icon={faCrown} />
                                         } 
                                         <Avatar>
                                             <AccountCircleIcon sx={{ fontSize: '2.5rem' }} />
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <div style={{ display: 'block' }}>
-                                        <div style={{ }}>
+                                    <div style={{ display: 'block', width: '30%' }}>
+                                        <div style={{ marginBottom: 10 }}>
                                             {player.info.name}
                                         </div>
-                                        <Button
+                                        {/* <TextField
+                                            select
+                                            sx={{ width: '100%' }}
+                                            SelectProps={{
+                                                MenuProps: MenuProps,
+                                            }}
+                                            label="Commander"
+                                            // defaultValue={{deck: player.info.decklist.find(deck => deck.did_play === true)?.name || '', playerID: player.info.id}}
+                                            value={Object.keys(playerDecks).length !== 0 ? playerDecks[player.info.id] : ''}
+                                            onChange={(e) => {
+                                                const {
+                                                    target: { value },
+                                                  } = e;
+                                                console.log(value);
+                                                handleSubmit(e);
+                                                // setPlayerItems(typeof value === 'string' ? value.split(',') : value,);
+                                            }}
+                                            id={`commander${player.info.id}`}
+                                        > */}
+                                            <Select
+                                                sx={{ width: '100%' }}
+                                                value={playerDecks[player.info.id]}
+                                                label='Commander'
+                                                onChange={(e) => {
+                                                    handleSubmit(e, player.info.id);
+                                                }}
+                                            >
+
+                                            
+                                            {/* {playerData.map(player => (
+                                                <MenuItem key={player.id} value={player.name}>
+                                                    <Checkbox checked={playerItems.indexOf(player.name) > -1} />
+                                                    <ListItemText primary={player.name} />
+                                                </MenuItem>
+                                            ))} */}
+                                            {player.info.decklist && player.info.decklist.map(deck => (
+                                                <MenuItem key={deck.name} id={`commander${player.info.id}`} value={deck.name}>
+                                                    {/* <ListItemText primary={deck.name} id={`commander${player.info.id}`}/> */}
+                                                    {deck.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                        {/* </TextField> */}
+                                        {/* <Button
                                             aria-controls={open ? 'basic-menu' : undefined}
                                             aria-haspopup="true"
                                             aria-expanded={open ? 'true' : undefined}
@@ -83,14 +165,17 @@ export function GameDetail(props) {
                                             MenuListProps={{
                                             'aria-labelledby': 'basic-button',
                                             }}
-                                        >   
+                                        >    */}
                                             {/* {player.info.decklist.map(deck => {
                                                 <MenuItem>HI</MenuItem>
                                             })} */}
-                                            <MenuItem onClick={handleClose}>Placeholder</MenuItem>
+
+                                            
+
+                                            {/* <MenuItem onClick={handleClose}>Placeholder</MenuItem> */}
                                             {/* <MenuItem onClick={handleClose}>My account</MenuItem>
                                             <MenuItem onClick={handleClose}>Logout</MenuItem> */}
-                                        </Menu>
+                                        {/* </Menu> */}
                                     </div>
                                     
                                     {/* <ListItemText primary={player.info.name} secondary="Commander: " sx={{ width: '25%' }}/> */}
@@ -98,10 +183,11 @@ export function GameDetail(props) {
                             ))}
                             
                         </List>
+                        </Box>
                     </Grid>
                     <Grid item xs={12} zeroMinWidth>
                         <Rating 
-                            value={funRating}
+                            value={+funRating}
                             readOnly
                             precision={0.5}
                         />

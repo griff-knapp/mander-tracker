@@ -95,6 +95,12 @@ export function CreateGame() {
         }
     }
 
+    const formatPlayerData = () => {
+        const formattedArray = playerData.filter(player => playerItems.filter(player2 => player2 === player.name).length > 0).map(player3 => ({info: {name: player3.name, id: player3.id, decklist: player3.decklist}, stats: {}}));
+        console.log(formattedArray);
+        return formattedArray;
+    }
+    
     return (
         <Box
           component="main"
@@ -197,7 +203,7 @@ export function CreateGame() {
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <GameDetail gameName={gameName} playerArray={playerData.filter(player => playerItems.filter(player2 => player2 === player.name).length > 0).map(player3 => ({info: {name: player3.name, id: player3.id, decklist: player3.decklist}, stats: {}}))} funRating={funRating} winner={winner} />
+                        <GameDetail gameName={gameName} playerArray={formatPlayerData()} funRating={funRating} winner={winner} />
                     </Grid>
                 </Grid>
             </Container>

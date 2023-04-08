@@ -38,7 +38,7 @@ const AppBar = styled(MuiAppBar, {
     }),
 }));
 
-const drawerWidth = 240;
+const drawerWidth = 150;
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -132,7 +132,7 @@ export function Navbar() {
                 pr: '24px', // keep right padding when drawer closed
                 }}
             >
-                <IconButton
+                {/* <IconButton
                 edge="start"
                 color="inherit"
                 aria-label="open drawer"
@@ -143,7 +143,7 @@ export function Navbar() {
                 }}
                 >
                 <MenuIcon />
-                </IconButton>
+                </IconButton> */}
                 <Typography
                 component="h1"
                 variant="h5"
@@ -199,7 +199,7 @@ export function Navbar() {
                 </IconButton> */}
             </Toolbar>
         </AppBar>
-        <Drawer variant="permanent" open={open}>
+        <Drawer variant="permanent" open={true}>
         <Toolbar
           sx={{
             display: 'flex',
@@ -213,8 +213,9 @@ export function Navbar() {
           </IconButton>
         </Toolbar>
         <Divider />
-        <List component="nav">
+        <List component="nav" sx={{ textAlign: 'center' }}>
           {/* {mainListItems} */}
+          <Typography variant='h6' sx={{ fontWeight: '400' }}>PODS</Typography>
           <Divider sx={{ my: 1 }} />
           {/* {secondaryListItems} */}
         </List>

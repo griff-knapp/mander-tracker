@@ -26,7 +26,6 @@ function Copyright(props) {
 
 export function Dashboard() {
   const { user } = useAuth();
-
   console.log(user); 
 
   return (

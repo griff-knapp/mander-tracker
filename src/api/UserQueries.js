@@ -46,10 +46,11 @@ export async function getGame(uuid) {
     if (dataWinner.error) console.log(dataWinner.error);
 
     const dataPlayers = await supabase
-        .from('user_game')
-        .select('user_ref, stats, info:user_ref(id, name)')
+        .from('getusergames')
+        // .select('user_ref, stats, info:user_ref(id, name)')
+        .select('*')
         .eq('game_ref', dataGame.data[0].id);
-    // console.log(dataPlayers);
+    console.log(dataPlayers);
     if (dataPlayers.error) console.log(dataPlayers.error);
     
     return {gameData: dataGame.data[0], winnerData: dataWinner.data[0], playerData: dataPlayers.data};
@@ -143,4 +144,24 @@ export async function addDeck(name, commander, id) {
     if (error) console.log(error);
 
     return data;
+}
+
+export async function setGameDecks(playerDecks, gameID) {
+    Object.keys(playerDecks).forEach(async (playerID) => {
+        if (playerDecks[playerID] !== '') {
+            console.log(playerDecks[playerID]);
+            const { error } = await supabase
+            .from('user_game')
+            .update({
+                deck_ref: playerDecks[playerID]
+            })
+            .eq('user_ref', playerID)
+            .eq('game_ref', gameID);
+
+            if (error) console.log(error);
+        }
+    });
+    
+    
+    return;
 }
