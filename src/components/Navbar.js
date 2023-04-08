@@ -6,7 +6,7 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+// import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
@@ -217,7 +217,7 @@ export function Navbar() {
           {/* {mainListItems} */}
           <Typography variant='h6' sx={{ fontWeight: '400' }}>PODS</Typography>
           <Divider sx={{ my: 1 }} />
-          {/* {secondaryListItems} */}
+          {/* {secondaryListItems} */} 
         </List>
       </Drawer>
       </>
