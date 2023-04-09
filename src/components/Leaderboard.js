@@ -51,7 +51,7 @@ export default function Leaderboard() {
         name: row.name,
         rank: i+1,
         winrate: row.stats.winrate,
-        mostPlayed: row.stats.most_played
+        mostPlayed: row.most_played || ''
       })
     );
   }
