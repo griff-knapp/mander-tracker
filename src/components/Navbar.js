@@ -20,6 +20,8 @@ import { useAuth } from '../contexts/Auth';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
+// import logo from '../logo/logo.png';
+
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
   })(({ theme, open }) => ({
@@ -147,15 +149,17 @@ export function Navbar() {
                 >
                 <MenuIcon />
                 </IconButton> */}
-                <Typography
-                component="h1"
-                variant="h5"
-                color="inherit"
-                noWrap
-                sx={{ flexGrow: 1 }}
+                <div
+                  component="h1"
+                  variant="h5"
+                  color="inherit"
+                  noWrap
+                  style={{ flexGrow: 1, display: 'flex' }}
                 >
-                    <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>Post Combat</Link>
-                </Typography>
+                    <Link to="/" style={{ alignItems: 'center', display: 'inherit', padding: '10px' }}>
+                      <img src={require("./../logo/logo.png")} alt='logo' style={{ height: 60 }}/>
+                    </Link>
+                </div>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }} >
                   <Typography
                       component="h4"
@@ -168,7 +172,7 @@ export function Navbar() {
                   </Typography>
                   <SpeedDial
                     ariaLabel="SpeedDial controlled open example"
-                    sx={{ position: 'absolute', top: 8, right: 20 }}
+                    sx={{ position: 'absolute', top: 15, right: 20 }}
                     FabProps={{color: 'secondary', size: 'medium'}}
                     direction='down'
                     icon={<SpeedDialIcon />}
