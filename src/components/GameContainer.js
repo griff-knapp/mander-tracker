@@ -84,8 +84,8 @@ export default function GameContainer() {
         const hours = Math.floor(totalMinutes / 60);
         const minutes = totalMinutes % 60;
 
-        console.log(hours);
-        console.log(minutes);
+        // console.log(hours);
+        // console.log(minutes);
         return (
             hours !== 0 ? 
                 hours + 'hr' +

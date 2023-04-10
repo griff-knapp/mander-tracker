@@ -32,7 +32,7 @@ import { useAuth } from "../../contexts/Auth";
 // };
 
 export function GameDetail(props) {
-    const { gameName, gameLength, gameID, playerArray, funRating, winner, newGame } = props;
+    const { gameName, gameLength, gameID, playerArray, funRating, winner, newGame, gameDate } = props;
     const [playerDecks, setPlayerDecks] = useState({});
     const { user } = useAuth();
 
@@ -100,12 +100,12 @@ export function GameDetail(props) {
                     container
                     spacing={2}
                 >
-                    <Grid item xs={5} zeroMinWidth>
+                    <Grid item xs={7} zeroMinWidth>
                         <Typography variant="h4" sx={{ fontWeight: 'bold', overflowWrap: 'break-word' }}>{gameName}</Typography>
                         <Typography variant="subtitle1" >{gameLength ? gameLengthFormat(gameLength) : ''}</Typography>
                     </Grid>
-                    <Grid item xs={7} zeroMinWidth>
-                        <Typography variant="subtitle1" sx={{ display: 'flex', justifyContent: 'end', fontWeight: 'bold' }}>12/19/2022</Typography>
+                    <Grid item xs={5} zeroMinWidth>
+                        <Typography variant="subtitle1" sx={{ display: 'flex', justifyContent: 'end', fontWeight: 'bold' }}>{gameDate ? gameDate.split(',')[0] : ''}</Typography>
                     </Grid>
                     <Grid item xs={12} zeroMinWidth>
                         <Typography component="legend">Players:</Typography>
@@ -127,7 +127,7 @@ export function GameDetail(props) {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <div style={{ display: 'block', width: '30%' }}>
-                                        <Typography variant="h5" style={{ marginBottom: 10, fontWeight: 450 }}>
+                                        <Typography variant="h5" style={{ marginBottom: 10, fontWeight: 450, width: '200%' }}>
                                             {player.info.name}
                                         </Typography>
                                         {!newGame && user.id === player.info.id ? 

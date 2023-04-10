@@ -53,7 +53,7 @@ export function DetailContainer() {
                 <Grid container spacing={3}>
                     <Grid item xs={12} >
                         {data !== null ? 
-                            <GameDetail gameName={data.gameData.name} gameID={data.gameData.id} playerArray={data.playerData} funRating={data.gameData.stats.fun_meter === null ? 0 : data.gameData.stats.fun_meter} winner={data.winnerData.name} />
+                            <GameDetail gameName={data.gameData.name} gameID={data.gameData.id} playerArray={data.playerData} funRating={data.gameData.stats.fun_meter === null ? 0 : data.gameData.stats.fun_meter} winner={data.winnerData.name} gameDate={new Date(data.gameData.created_at).toLocaleString()} />
                         :   
                             <Box sx={{ display: 'flex', justifyContent: 'center'}}>
                                 <CircularProgress />
