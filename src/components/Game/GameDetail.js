@@ -1,7 +1,7 @@
 import Paper from "@mui/material/Paper";
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { Box, Select } from "@mui/material";
+import { Box, Select, Button } from "@mui/material";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 // import ListItemText from '@mui/material/ListItemText';
@@ -19,6 +19,7 @@ import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from "react";
 import { setGameDecks } from "../../api/UserQueries";
 import { useAuth } from "../../contexts/Auth";
+import { useHistory } from 'react-router';
 
 // const ITEM_HEIGHT = 48;
 // const ITEM_PADDING_TOP = 8;
@@ -35,7 +36,7 @@ export function GameDetail(props) {
     const { gameName, gameLength, gameID, playerArray, funRating, winner, newGame, gameDate } = props;
     const [playerDecks, setPlayerDecks] = useState({});
     const { user } = useAuth();
-
+    const history = useHistory();
     // const [anchorEl, setAnchorEl] = useState(null);
     // const open = Boolean(anchorEl);
 
@@ -202,6 +203,9 @@ export function GameDetail(props) {
                             readOnly
                             precision={0.5}
                         />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button variant="contained" color="secondary" onClick={() => history.push('/')}>Back</Button>
                     </Grid>
                 </Grid>
             </Box>
