@@ -7,6 +7,9 @@ import Button from '@mui/material/Button';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Popover from '@mui/material/Popover';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import { CardActionArea } from '@mui/material';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -31,25 +34,23 @@ export default function GameContainer() {
     const handlePopoverClose = () => {
         setAnchorEl(null);
     };
-    // const [pageCount, setPageCount] = useState(1);
-    // const [playerID1, setPlayerID1] = useState(null);
-    // const [playerID2, setPlayerID2] = useState(null);
-    // const [playerID3, setPlayerID3] = useState(null);
-    // const [playerID4, setPlayerID4] = useState(null);
-    // const [playerID5, setPlayerID5] = useState(null);
 
     useEffect(() => {
         const getData = async () => {
             try {
               const result = await getGames();
               if (result !== undefined) {
-                // console.log(result[0].data);
                 const updatedGameArray = result[0].data.map(game => {
                     const gameDate = new Date(game.created_at).toLocaleString();
                     return {
                         ...game, created_at: gameDate,
                     }
-                })
+                });
+                updatedGameArray.sort(function(a,b){
+                    // Turn your strings into dates, and then subtract them
+                    // to get a value that is either negative, positive, or zero.
+                    return new Date(a.created_at) - new Date(b.created_at);
+                });
                 setData(updatedGameArray);
               }
             } catch(err) {
@@ -76,12 +77,36 @@ export default function GameContainer() {
 
     const open = Boolean(anchorEl);
 
+    const gameLengthFormat = (totalSeconds) => {
+        const totalMinutes = Math.floor(totalSeconds / 60);
+
+        // const seconds = totalSeconds % 60;
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        console.log(hours);
+        console.log(minutes);
+        return (
+            hours !== 0 ? 
+                hours + 'hr' +
+                (minutes !== 0 ? 
+                    minutes + 'min'
+                : '')
+            :
+                minutes + 'min'
+        );
+    }
+
     return (
-        <>
+        <>  
+            {data === null && 
+                <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+                    <CircularProgress />
+                </Box>
+        }
             {data !== null &&
-                
-                    <Grid container spacing={2.5}>
-                        {data.slice((page - 1) * 3, page * 3).map(guy => (
+                    <Grid container spacing={2.5} sx={{}}>
+                        {data.slice((page - 1) * 3, (page * 3)).map(guy => (
                         <Grid item xs={12} lg={4} key={guy.name}>
                             <Card>
                                 <CardActionArea onClick={() => handleViewGame(guy.uuid)}>
@@ -97,28 +122,31 @@ export default function GameContainer() {
                                         >
                                             {guy.name.length > 15 ? guy.name.slice(0, 15) + '...' : guy.name}
                                         </Typography>
-                                        <Popover
-                                            id="mouse-over-popover"
-                                            sx={{
-                                                pointerEvents: 'none',
-                                                boxShadow: 'none'
-                                            }}
-                                            open={open && guy.name.length > 15}
-                                            anchorEl={anchorEl}
-                                            anchorOrigin={{
-                                            vertical: 'bottom',
-                                            horizontal: 'left',
-                                            }}
-                                            transformOrigin={{
-                                            vertical: 'top',
-                                            horizontal: 'left',
-                                            }}
-                                            onClose={handlePopoverClose}
-                                            disableRestoreFocus
-                                            elevation={2}
-                                        >
-                                            <Typography sx={{ p: 1 }}>{popText}</Typography>
-                                        </Popover>
+                                        {guy.name.length > 15 &&
+                                            <Popover
+                                                id="mouse-over-popover"
+                                                sx={{
+                                                    pointerEvents: 'none',
+                                                    boxShadow: 'none',
+                                                    
+                                                }}
+                                                open={open}
+                                                anchorEl={anchorEl}
+                                                anchorOrigin={{
+                                                vertical: 'bottom',
+                                                horizontal: 'left',
+                                                }}
+                                                transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'left',
+                                                }}
+                                                onClose={handlePopoverClose}
+                                                disableRestoreFocus
+                                                elevation={2}
+                                            >
+                                                <Typography sx={{ p: 1, backgroundColor: '#9FB3C8', color: '#102A43' }}>{popText}</Typography>
+                                            </Popover>
+                                        }
                                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                             <FontAwesomeIcon style={{ color: 'gold' }} icon={faCrown} />{' '+guy.winner}
                                         </Typography>
@@ -132,7 +160,7 @@ export default function GameContainer() {
                                             Length:
                                         </Typography>
                                         <Typography variant="body2" component="span">
-                                            {' ' + Math.ceil(((parseInt(guy.duration) % 86400) & 3600) / 60) + 'min'}
+                                            {' ' + gameLengthFormat(guy.duration)}
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>

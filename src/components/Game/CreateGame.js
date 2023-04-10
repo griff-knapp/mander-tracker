@@ -9,6 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
+// import { TimeField } from '@mui/x-date-pickers/TimeField';
 // import Checkbox from '@mui/material/Checkbox';
 
 import { addGame, getUsers } from "../../api/UserQueries";
@@ -20,16 +21,32 @@ const ITEM_PADDING_TOP = 8;
 const MenuProps = {
     PaperProps: {
         style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
         },
     },
 };
+
+const timeValues = [
+    {label: '15 min', value: 900},
+    {label: '30 min', value: 1800},
+    {label: '45 min', value: 2700},
+    {label: '1 hr', value: 3600},
+    {label: '1hr15 min', value: 4500},
+    {label: '1hr30 min', value: 5400},
+    {label: '1hr45 min', value: 6300},
+    {label: '2 hr', value: 7200},
+    {label: '2hr15 min', value: 8100},
+    {label: '2hr30 min', value: 9000},
+    {label: '2hr45 min', value: 9900},
+    {label: '3 hr', value: 10800},
+    'so long I wanted to die...'
+]
 
 export function CreateGame() {
     const [gameName, setGameName] = useState('');
     const [playerData, setPlayerData] = useState([]);
     const [playerItems, setPlayerItems] = useState([]);
-    // const [duration, setDuration] = useState(0);
+    const [duration, setDuration] = useState('');
     const [funRating, setFunRating] = useState(0);
     const [winner, setWinner] = useState('');
 
@@ -87,7 +104,7 @@ export function CreateGame() {
         console.log(userGameArray);
 
         try {
-            const response = await addGame(gameName, playerCount, winnerPlayer, 3600, funRating, null, Array(0), userGameArray);
+            const response = await addGame(gameName, playerCount, winnerPlayer, duration, funRating, null, Array(0), userGameArray);
             console.log(response);
             history.push('/');
         } catch (err) {
@@ -135,6 +152,7 @@ export function CreateGame() {
                                         <TextField
                                             id="outlined-name"
                                             label="Name"
+                                            style={{ width: '100%' }}
                                             value={gameName}
                                             // inputProps={{ maxlength: '19' }}
                                             onChange={(e) => setGameName(e.target.value)}
@@ -143,6 +161,7 @@ export function CreateGame() {
                                     <Grid item xs={12}>
                                         <TextField
                                             id="outlined-players"
+                                            style={{ width: '100%' }}
                                             select
                                             SelectProps={{
                                                 multiple: true,
@@ -167,18 +186,18 @@ export function CreateGame() {
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={12} md={6}>
                                         <TextField
                                                 id="outlined-players"
                                                 select
+                                                style={{ width: '100%' }}
                                                 SelectProps={{
                                                     MenuProps: MenuProps,
-                                                    disabled: playerItems.length === 0
+                                                    disabled: playerItems.length === 0,
                                                 }}
                                                 label={playerItems.length === 0 ? "Select players for your game" : "Winner"}
                                                 value={winner}
                                                 onChange={(e) => {
-                                                    // console.log(playerItems);
                                                     setWinner(e.target.value);
                                                 }}
                                         >
@@ -188,6 +207,39 @@ export function CreateGame() {
                                                 </MenuItem>
                                             ))}
                                         </TextField>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <TextField
+                                            select
+                                            style={{ width: '100%' }}
+                                            SelectProps={{
+                                                MenuProps: MenuProps
+                                            }}
+                                            label={'Duration'}
+                                            value={duration}
+                                            onChange={(e) => {
+                                                console.log(e.target.value);
+                                                setDuration(e.target.value);
+                                            }}
+                                        >
+                                            {timeValues.map(time => (
+                                                <MenuItem value={time.value} style={{ whiteSpace: 'pre' }}>{time.label}</MenuItem>
+                                            ))}
+                                        </TextField>
+                                        {/* <InputLabel>Duration</InputLabel>
+                                        <Select
+                                            label={'Duration'}
+                                            sx={{width: '50%'}}
+                                            value={duration}
+                                            onChange={(e) => {
+                                                console.log(e.target.value);
+                                                setDuration(e.target.value);
+                                            }}
+                                        >
+                                            {timeValues.map(time => (
+                                                <MenuItem value={time}>{time}</MenuItem>
+                                            ))}
+                                        </Select> */}
                                     </Grid>
                                     <Grid item sx={{ marginLeft: 1 }} xs={12}>
                                         <Typography component="legend">Fun Rating</Typography>        
@@ -203,7 +255,7 @@ export function CreateGame() {
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <GameDetail gameName={gameName} playerArray={formatPlayerData()} funRating={funRating} winner={winner} />
+                        <GameDetail gameName={gameName} gameLength={duration} playerArray={formatPlayerData()} funRating={funRating} winner={winner} newGame={true} />
                     </Grid>
                 </Grid>
             </Container>

@@ -47,15 +47,15 @@ export function Dashboard() {
               {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>
                 <Typography variant='h5' sx={{ mb: 0.5 }}>Games</Typography>
-                <Paper
+                {/* <Paper
                   sx={{
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column'
                   }}
-                >
+                > */}
                   <GameContainer />
-                </Paper>
+                {/* </Paper> */}
               </Grid>
               {/* Recent Deposits */}
               <Grid item xs={12} md={4} lg={3}>

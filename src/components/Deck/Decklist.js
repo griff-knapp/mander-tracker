@@ -10,8 +10,6 @@ import TableRow from '@mui/material/TableRow';
 import TableContainer from '@mui/material/TableContainer';
 import { Container, Grid, Paper, Toolbar, Box } from "@mui/material";
 
-
-
 export function Decklist() {
     const [decklist, setDecklist] = useState(null);
     const { user } = useAuth();

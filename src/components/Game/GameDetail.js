@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from "react";
 import { setGameDecks } from "../../api/UserQueries";
+import { useAuth } from "../../contexts/Auth";
 
 // const ITEM_HEIGHT = 48;
 // const ITEM_PADDING_TOP = 8;
@@ -31,8 +32,10 @@ import { setGameDecks } from "../../api/UserQueries";
 // };
 
 export function GameDetail(props) {
-    const { gameName, gameID, playerArray, funRating, winner } = props;
+    const { gameName, gameLength, gameID, playerArray, funRating, winner, newGame } = props;
     const [playerDecks, setPlayerDecks] = useState({});
+    const { user } = useAuth();
+
     // const [anchorEl, setAnchorEl] = useState(null);
     // const open = Boolean(anchorEl);
 
@@ -41,7 +44,9 @@ export function GameDetail(props) {
             
             setPlayerDecks(prev => ({...prev, [player.info.id]: player.info.decklist.find(deck => deck.did_play === true)?.name || '' }))
         });
+        // console.log(user);
         // console.log(playerDecks);
+        // console.log(gameLengthFormat(gameLength));
     },[playerArray]);
 
     // const handleClick = (event) => {
@@ -52,6 +57,26 @@ export function GameDetail(props) {
     // };
     
     console.log(gameName);
+
+    const gameLengthFormat = (totalSeconds) => {
+        const totalMinutes = Math.floor(totalSeconds / 60);
+
+        // const seconds = totalSeconds % 60;
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        console.log(hours);
+        console.log(minutes);
+        return (
+            hours !== 0 ? 
+                hours + 'hr' +
+                (minutes !== 0 ? 
+                    minutes + 'min'
+                : '')
+            :
+                minutes + 'min'
+        );
+    }
 
     const handleSubmit = async (e, id) => {
         e.preventDefault();
@@ -76,7 +101,8 @@ export function GameDetail(props) {
                     spacing={2}
                 >
                     <Grid item xs={5} zeroMinWidth>
-                        <Typography variant="h5" sx={{ fontWeight: 'bold', overflowWrap: 'break-word' }}>{gameName}</Typography>
+                        <Typography variant="h4" sx={{ fontWeight: 'bold', overflowWrap: 'break-word' }}>{gameName}</Typography>
+                        <Typography variant="subtitle1" >{gameLength ? gameLengthFormat(gameLength) : ''}</Typography>
                     </Grid>
                     <Grid item xs={7} zeroMinWidth>
                         <Typography variant="subtitle1" sx={{ display: 'flex', justifyContent: 'end', fontWeight: 'bold' }}>12/19/2022</Typography>
@@ -90,62 +116,47 @@ export function GameDetail(props) {
                             onSubmit={handleSubmit}
                         >
                         <List sx={{ bgcolor: 'background.paper', width: '100%' }}>
-                            {playerArray !== undefined && Object.keys(playerDecks).length !== 0 && playerArray.map(player => (
+                            {playerArray !== undefined && Object.keys(playerDecks).length !== 0 && user && playerArray.map(player => (
                                 <ListItem key={player.info.name} sx={{ justifyContent: 'flex-start', p: 0, ml: 1, width: '100%', alignItems: 'start', mb: 1.5 }}>
                                     <ListItemAvatar>
                                         {winner === player.info.name && 
-                                            <FontAwesomeIcon style={{ color: 'gold', position: 'absolute', zIndex: '10000', bottom: 80 }} icon={faCrown} />
+                                            <FontAwesomeIcon style={{ color: 'gold', position: 'absolute', zIndex: '10000', top: -5 }} icon={faCrown} />
                                         } 
                                         <Avatar>
                                             <AccountCircleIcon sx={{ fontSize: '2.5rem' }} />
                                         </Avatar>
                                     </ListItemAvatar>
                                     <div style={{ display: 'block', width: '30%' }}>
-                                        <div style={{ marginBottom: 10 }}>
+                                        <Typography variant="h5" style={{ marginBottom: 10, fontWeight: 450 }}>
                                             {player.info.name}
-                                        </div>
-                                        {/* <TextField
-                                            select
-                                            sx={{ width: '100%' }}
-                                            SelectProps={{
-                                                MenuProps: MenuProps,
-                                            }}
-                                            label="Commander"
-                                            // defaultValue={{deck: player.info.decklist.find(deck => deck.did_play === true)?.name || '', playerID: player.info.id}}
-                                            value={Object.keys(playerDecks).length !== 0 ? playerDecks[player.info.id] : ''}
-                                            onChange={(e) => {
-                                                const {
-                                                    target: { value },
-                                                  } = e;
-                                                console.log(value);
-                                                handleSubmit(e);
-                                                // setPlayerItems(typeof value === 'string' ? value.split(',') : value,);
-                                            }}
-                                            id={`commander${player.info.id}`}
-                                        > */}
+                                        </Typography>
+                                        {!newGame && user.id === player.info.id ? 
                                             <Select
-                                                sx={{ width: '100%' }}
+                                                sx={{ width: '200%' }}
                                                 value={playerDecks[player.info.id]}
                                                 label='Commander'
                                                 onChange={(e) => {
                                                     handleSubmit(e, player.info.id);
                                                 }}
                                             >
-
-                                            
-                                            {/* {playerData.map(player => (
-                                                <MenuItem key={player.id} value={player.name}>
-                                                    <Checkbox checked={playerItems.indexOf(player.name) > -1} />
-                                                    <ListItemText primary={player.name} />
-                                                </MenuItem>
-                                            ))} */}
-                                            {player.info.decklist && player.info.decklist.map(deck => (
-                                                <MenuItem key={deck.name} id={`commander${player.info.id}`} value={deck.name}>
-                                                    {/* <ListItemText primary={deck.name} id={`commander${player.info.id}`}/> */}
-                                                    {deck.name}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
+                                                {player.info.decklist && player.info.decklist.map(deck => (
+                                                    <MenuItem key={deck.name} id={`commander${player.info.id}`} value={deck.name}>
+                                                        {/* <ListItemText primary={deck.name} id={`commander${player.info.id}`}/> */}
+                                                        {deck.name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        :
+                                            (!newGame && user.id !== player.info.id && player.info.decklist.find(deck => deck.did_play === true) !== undefined) ?
+                                                <>
+                                                    <Typography sx={{ ml: 1 }} variant="h6">Commander:</Typography>
+                                                    <Typography sx={{ ml: 1 }}>{player.info.decklist.find(deck => deck.did_play === true).name}</Typography>
+                                                </>
+                                                
+                                        :
+                                            null
+                                        }
+                                        
                                         {/* </TextField> */}
                                         {/* <Button
                                             aria-controls={open ? 'basic-menu' : undefined}
