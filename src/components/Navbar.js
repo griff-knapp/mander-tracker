@@ -25,11 +25,16 @@ import AddCardIcon from '@mui/icons-material/AddCard';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/Auth';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
+import { createPod, getUserPods } from '../api/UserQueries';
+import { Add } from '@mui/icons-material';
+import { TextField } from '@mui/material';
 
 // import logo from '../logo/logo.png';
 
@@ -81,19 +86,49 @@ import { Link } from 'react-router-dom';
 
 
 
-const pages = ['The Northern Boys', 'Climbing Wolf', 'Tarrytown Apt'];
+// const pages = ['The Northern Boys', 'Climbing Wolf', 'Tarrytown Apt'];
 
 export function Navbar() {
-    const { signOut, session } = useAuth();
+    const { signOut, session, user } = useAuth();
     // const [open, setOpen] = useState(false);
     // const [dialOpen, dialSetOpen] = useState(false);
+    const [pods, setPods] = useState(null);
+    const [editNewPod, setEditNewPod] = useState(false);
+    const [newPodName, setNewPodName] = useState('');
+    const [activePod, setActivePod] = useState(null);
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
     const history = useHistory();
     
-    // const handleOpen = () => dialSetOpen(true);
-    // const handleClose = () => dialSetOpen(false);
+    useEffect(() => {
+      const getData = async () => {
+        if (user) {
+          try {
+            const response = await getUserPods(user.id);
+            console.log(response);
+            setPods(response);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
+      getData();
+    }, [user]);
+
+    
+
+    const getPodData = async () => {
+      if (user) {
+        try {
+          const response = await getUserPods(user.id);
+          console.log(response);
+          setPods(response);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
 
     const handleOpenNavMenu = (event) => {
       setAnchorElNav(event.currentTarget);
@@ -102,7 +137,9 @@ export function Navbar() {
       setAnchorElUser(event.currentTarget);
     };
   
-    const handleCloseNavMenu = () => {
+    const handleCloseNavMenu = (uuid) => {
+      handleClickPod(uuid);
+      setActivePod(uuid);
       setAnchorElNav(null);
     };
   
@@ -124,10 +161,9 @@ export function Navbar() {
         return null;
     }
 
-    // const handleAddDeck = () => {
-    //   console.log('deck added!');
-    //   history.push('/new-deck');
-    // }
+    const handleClickPod = (uuid) => {
+      history.push('/pod:'+uuid);
+    }
 
     const actions = [
       {
@@ -164,6 +200,28 @@ export function Navbar() {
         }
       },
     ];
+
+    const handleCreateNewPod = async () => {
+      if (newPodName !== '') {
+        try {
+          const response = await createPod(newPodName, user.id);
+          console.log(response);
+          if (response !== null) {
+            setEditNewPod(false);
+            setNewPodName('');
+            getPodData();
+            setActivePod(response[0].uuid);
+            history.push('/pod:'+response[0].uuid);
+          } else {
+            setNewPodName('');
+            setEditNewPod(true);
+          }
+        } catch (error) {
+          setEditNewPod(true);
+          console.log(error);
+        }
+      }
+    }
 
     return (
         <>
@@ -207,9 +265,9 @@ export function Navbar() {
                       display: { xs: 'block', md: 'none' },
                     }}
                   >
-                    {pages.map((page) => (
-                      <MenuItem key={page} onClick={handleCloseNavMenu}>
-                        <Typography textAlign="center">{page}</Typography>
+                    {pods !== null && pods.map((pod) => (
+                      <MenuItem key={pod.name} onClick={() => handleCloseNavMenu(pod.uuid)}>
+                        <Typography textAlign="center">{pod.name}</Typography>
                       </MenuItem>
                     ))}
                   </Menu>
@@ -220,15 +278,50 @@ export function Navbar() {
                   </Link>
                 </Box>
                 <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                  {pages.map((page) => (
+                  {pods !== null && pods.map((pod) => (
                     <Button
-                      key={page}
-                      onClick={handleCloseNavMenu}
-                      sx={{ my: 2, color: 'white', display: 'block' }}
+                      key={pod.name}
+                      onClick={() => handleCloseNavMenu(pod.uuid)}
+                      sx={
+                        activePod !== null && activePod === pod.uuid ?
+                          { my: 2, color: 'black', display: 'block', backgroundColor: '#9FB3C8' }
+                        :
+                          { my: 2, color: 'white', display: 'block' }
+                      }
                     >
-                      {page}
+                      {pod.name}
                     </Button>
                   ))}
+                  { !editNewPod ?
+                    <Button color="secondary" variant="outlined" sx={{ my: 2, ml: 2, display: 'flex' }} onClick={() => setEditNewPod(true)}>
+                      <Add />
+                    </Button>
+                  :
+                    <>
+                      <TextField 
+                        variant='filled'
+                        color='secondary'
+                        value={newPodName}
+                        onChange={(e) => setNewPodName(e.target.value)}
+                      />
+                      <Button color="secondary" variant="outlined" sx={{ my: 2, display: 'flex' }} onClick={handleCreateNewPod}>
+                        <CheckCircleIcon />
+                      </Button>
+                      <Button
+                        color="secondary"
+                        variant="outlined"
+                        sx={{ my: 2, display: 'flex' }}
+                        onClick={() => {
+                          setEditNewPod(false);
+                          setNewPodName('');
+                        }}
+                      >
+                        <CancelIcon />
+                      </Button>
+                    </>
+                    
+                  }
+                  
                 </Box>
                 <Box sx={{ flexGrow: 0 }}>
                   <Tooltip title="Open settings">
@@ -324,7 +417,7 @@ export function Navbar() {
           <Typography variant='h6' sx={{ fontWeight: '400' }}>PODS</Typography>
           <Divider sx={{ my: 1 }} />
         </List>
-      </Drawer> */}
+      </Drawer> */} 
       </>
     );
 }

@@ -17,13 +17,14 @@ import { faCrown } from '@fortawesome/free-solid-svg-icons';
 
 import { getGames } from "../api/UserQueries";
 
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 export default function GameContainer() {
     const [data, setData] = useState(null);
     const [page, setPage] = useState(1);
     const [anchorEl, setAnchorEl] = useState(null);
     const [popText, setPopText] = useState('');
+    const { uuid } = useParams();
 
     const handlePopoverOpen = (event) => {
         // console.log(event.currentTarget.id);
@@ -36,11 +37,13 @@ export default function GameContainer() {
     };
 
     useEffect(() => {
+        console.log(uuid);
         const getData = async () => {
             try {
-              const result = await getGames();
+              const result = await getGames(uuid);
+              console.log(result);
               if (result !== undefined) {
-                const updatedGameArray = result[0].data.map(game => {
+                const updatedGameArray = result.map(game => {
                     const gameDate = new Date(game.created_at).toLocaleString();
                     return {
                         ...game, created_at: gameDate,
@@ -51,6 +54,7 @@ export default function GameContainer() {
                     // to get a value that is either negative, positive, or zero.
                     return new Date(a.created_at) - new Date(b.created_at);
                 });
+                console.log(updatedGameArray);
                 setData(updatedGameArray);
               }
             } catch(err) {
@@ -58,7 +62,7 @@ export default function GameContainer() {
             }
         }
         getData();
-    },[]);
+    },[uuid]);
 
     const history = useHistory();
 
@@ -106,6 +110,19 @@ export default function GameContainer() {
         }
             {data !== null &&
                     <Grid container spacing={2.5} sx={{}}>
+                        {data.length === 0 &&
+                            <Grid item xs={12} lg={4}>
+                                <Card>
+                                    <CardActionArea>
+                                        <CardContent>
+                                            <Typography variant="h5">
+                                                Pod has no games yet
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </Grid>
+                        }
                         {data.slice((page - 1) * 3, (page * 3)).map(guy => (
                         <Grid item xs={12} lg={4} key={guy.name}>
                             <Card>

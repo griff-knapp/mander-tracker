@@ -17,6 +17,7 @@ import { DetailContainer } from "./Game/DetailContainer";
 import { CreateDeck } from "./Deck/CreateDeck";
 import { Decklist } from "./Deck/Decklist";
 import { UserProfile } from "./Profile/UserProfile";
+import { PodDashboard } from "./PodDashboard";
 
 const mdTheme = createTheme({
   palette: {
@@ -49,6 +50,7 @@ export function App() {
                 <Route path="/new-deck" component={CreateDeck} />
                 <Route path="/decklist" component={Decklist} />
                 <Route path="/user-profile" component={UserProfile} />
+                <Route path="/pod:uuid?" component={PodDashboard} />
               </Switch>
             </Box> 
           </ThemeProvider>

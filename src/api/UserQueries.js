@@ -22,10 +22,22 @@ export async function getUser(email) {
     return user;
 }
 
-export async function getGames() {
+export async function getUsersByPod(podUUID) {
+    // console.log(supabase);
+    const { data: user, error } = await supabase
+        .from('getusers')
+        .select(`*`)
+        .eq('pod_uuid', podUUID.slice(1));
+    if (error) console.log(error);
+    console.log(user);
+    return user;
+}
+
+export async function getGames(podUUID) {
     const { data: gameArray, error } = await supabase
         .from('getgames')
-        .select('*');
+        .select('*')
+        .eq('pod_uuid', podUUID.slice(1));
         if (error) console.log(error);
         return gameArray;
 }
@@ -164,4 +176,35 @@ export async function setGameDecks(playerDecks, gameID) {
     
     
     return;
+}
+
+export async function getUserPods(userID) {
+    const { data: podlist, error } = await supabase
+        .from('getuserpods')
+        .select('*')
+        .eq('user_ref', userID);
+
+    if (error) console.log(error);
+
+    return podlist;
+}
+
+export async function createPod(podName, userID) {
+    const { data, error } = await supabase
+        .from('pod')
+        .insert({ name: podName })
+        .select();
+    
+    if (error) { 
+        console.log(error);
+    } else {
+        const dataUserPod = await supabase
+        .from('user_pod')
+        .insert({ pod_ref: data[0].id, user_ref: userID, is_admin: true });
+
+        if (dataUserPod.error) {
+            console.log(dataUserPod.error);
+        }
+    }
+    return data;
 }

@@ -8,7 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableContainer from '@mui/material/TableContainer';
-import { Container, Grid, Paper, Toolbar, Box, Typography } from "@mui/material";
+import { Container, Grid, Paper, Toolbar, Box, Typography, Button } from "@mui/material";
 
 export function Decklist() {
     const [decklist, setDecklist] = useState(null);
@@ -78,6 +78,9 @@ export function Decklist() {
                                 </TableContainer>
                             {/* </Box> */}
                         {/* </Paper> */}
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button variant="contained" color="secondary">Add Deck</Button>
                     </Grid>
                 </Grid>
             </Container>

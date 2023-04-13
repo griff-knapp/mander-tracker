@@ -10,7 +10,8 @@ import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 // import Typography from '@mui/material/Typography';
 // import Title from './Title';
-import { getGames, getUsers } from '../api/UserQueries';
+import { getUsersByPod } from '../api/UserQueries';
+import { useParams } from 'react-router-dom';
 
 // const columns = [
 //   { field: 'rank', headerName: 'Rank', type: 'number', sortable: false },
@@ -21,11 +22,13 @@ import { getGames, getUsers } from '../api/UserQueries';
 
 export default function Leaderboard() {
   const [userData, setUserData] = useState([{id:0}]);
+  let { uuid } = useParams();
 
   useEffect(() => {
+    console.log(uuid);
     const getData = async () => {
       try {
-        const users = await getUsers();
+        const users = await getUsersByPod(uuid);
         if (users) {
           const formattedData = formatRows(users);
           setUserData(formattedData);
@@ -35,8 +38,8 @@ export default function Leaderboard() {
       }
     }
     getData();
-    getGames();
-  },[]);
+    // getGames();
+  },[uuid]);
 
   const formatRows = (rawData) => {
     rawData.sort((a, b) => {

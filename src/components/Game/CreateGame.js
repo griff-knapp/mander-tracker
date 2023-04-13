@@ -223,7 +223,7 @@ export function CreateGame() {
                                             }}
                                         >
                                             {timeValues.map(time => (
-                                                <MenuItem value={time.value} style={{ whiteSpace: 'pre' }}>{time.label}</MenuItem>
+                                                <MenuItem key={time.label} value={time.value} style={{ whiteSpace: 'pre' }}>{time.label}</MenuItem>
                                             ))}
                                         </TextField>
                                         {/* <InputLabel>Duration</InputLabel>
