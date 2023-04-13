@@ -143,6 +143,9 @@ export function GameDetail(props) {
                                                 onChange={(e) => {
                                                     handleSubmit(e, player.id);
                                                 }}
+                                                MenuProps={{
+                                                    style: {zIndex: '10001'}
+                                                }}
                                             >
                                                 {player.decklist && player.decklist.map(deck => (
                                                     <MenuItem key={deck.name} id={`commander${player.id}`} value={deck.name}>
