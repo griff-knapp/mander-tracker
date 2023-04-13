@@ -41,9 +41,9 @@ export function GameDetail(props) {
     // const open = Boolean(anchorEl);
 
     useEffect(() => {
+        console.log(playerArray);
         playerArray.forEach(player => {
-            
-            setPlayerDecks(prev => ({...prev, [player.info.id]: player.info.decklist.find(deck => deck.did_play === true)?.name || '' }))
+            setPlayerDecks(prev => ({...prev, [player.id]: player.decklist.find(deck => deck.did_play === true)?.name || '' }))
         });
         // console.log(user);
         // console.log(playerDecks);
@@ -118,9 +118,9 @@ export function GameDetail(props) {
                         >
                         <List sx={{ bgcolor: 'background.paper', width: '100%' }}>
                             {playerArray !== undefined && Object.keys(playerDecks).length !== 0 && user && playerArray.map(player => (
-                                <ListItem key={player.info.name} sx={{ justifyContent: 'flex-start', p: 0, ml: 1, width: '100%', alignItems: 'start', mb: 1.5 }}>
+                                <ListItem key={player.name} sx={{ justifyContent: 'flex-start', p: 0, ml: 1, width: '100%', alignItems: 'start', mb: 1.5 }}>
                                     <ListItemAvatar>
-                                        {winner === player.info.name && 
+                                        {winner === player.name && 
                                             <FontAwesomeIcon style={{ color: 'gold', position: 'absolute', zIndex: '10000', top: -5 }} icon={faCrown} />
                                         } 
                                         <Avatar>
@@ -129,26 +129,30 @@ export function GameDetail(props) {
                                     </ListItemAvatar>
                                     <div style={{ display: 'block', width: '30%' }}>
                                         <Typography variant="h5" style={{ marginBottom: 10, fontWeight: 450, width: '200%' }}>
-                                            {player.info.name}
+                                            {player.name}
                                         </Typography>
-                                        {!newGame && user.id === player.info.id ? 
+                                        {
+                                            !newGame 
+                                            // && 
+                                            // user.id === player.info.id 
+                                        ? 
                                             <Select
                                                 sx={{ width: '200%' }}
-                                                value={playerDecks[player.info.id]}
+                                                value={playerDecks[player.id]}
                                                 label='Commander'
                                                 onChange={(e) => {
-                                                    handleSubmit(e, player.info.id);
+                                                    handleSubmit(e, player.id);
                                                 }}
                                             >
-                                                {player.info.decklist && player.info.decklist.map(deck => (
-                                                    <MenuItem key={deck.name} id={`commander${player.info.id}`} value={deck.name}>
+                                                {player.decklist && player.decklist.map(deck => (
+                                                    <MenuItem key={deck.name} id={`commander${player.id}`} value={deck.name}>
                                                         {/* <ListItemText primary={deck.name} id={`commander${player.info.id}`}/> */}
-                                                        {deck.name}
+                                                        {`${deck.name} - ${deck.commander}`}
                                                     </MenuItem>
                                                 ))}
                                             </Select>
                                         :
-                                            (!newGame && user.id !== player.info.id && player.info.decklist.find(deck => deck.did_play === true) !== undefined) ?
+                                            (!newGame && user.id !== player.id && player.decklist.find(deck => deck.did_play === true) !== undefined) ?
                                                 <>
                                                     <Typography sx={{ ml: 1 }} variant="h6">Commander:</Typography>
                                                     <Typography sx={{ ml: 1 }}>{player.info.decklist.find(deck => deck.did_play === true).name}</Typography>

@@ -40,8 +40,8 @@ export default function Leaderboard() {
 
   const formatRows = (rawData) => {
     rawData.sort((a, b) => {
-      const winsA = a.stats.winrate;
-      const winsB = b.stats.winrate;
+      const winsA = a.winrate;
+      const winsB = b.winrate;
       if (winsA < winsB) return 1;
       if (winsA > winsB) return -1;
       return 0;
@@ -50,7 +50,7 @@ export default function Leaderboard() {
         id: row.id,
         name: row.name,
         rank: i+1,
-        winrate: row.stats.winrate,
+        winrate: row.winrate,
         mostPlayed: row.most_played || ''
       })
     );

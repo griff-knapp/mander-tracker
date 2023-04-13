@@ -1,19 +1,30 @@
-import { styled } from '@mui/material/styles';
+// import { styled } from '@mui/material/styles';
 // import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 // import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+// import AdbIcon from '@mui/icons-material/Adb';
 // import Divider from '@mui/material/Divider';
 // import IconButton from '@mui/material/IconButton';
 // import MenuIcon from '@mui/icons-material/Menu';
 // import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
+// import SpeedDial from '@mui/material/SpeedDial';
+// import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+// import SpeedDialAction from '@mui/material/SpeedDialAction';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { useState } from 'react';
 import { useAuth } from '../contexts/Auth';
@@ -22,25 +33,25 @@ import { Link } from 'react-router-dom';
 
 // import logo from '../logo/logo.png';
 
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-  })(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
-}));
+// const AppBar = styled(MuiAppBar, {
+//     shouldForwardProp: (prop) => prop !== 'open',
+//   })(({ theme, open }) => ({
+//     zIndex: theme.zIndex.drawer + 1,
+//     transition: theme.transitions.create(['width', 'margin'], {
+//       easing: theme.transitions.easing.sharp,
+//       duration: theme.transitions.duration.leavingScreen,
+//     }),
+//     ...(open && {
+//       marginLeft: drawerWidth,
+//       width: `calc(100% - ${drawerWidth}px)`,
+//       transition: theme.transitions.create(['width', 'margin'], {
+//         easing: theme.transitions.easing.sharp,
+//         duration: theme.transitions.duration.enteringScreen,
+//       }),
+//     }),
+// }));
 
-const drawerWidth = 150;
+// const drawerWidth = 150;
 
 // const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
 //   ({ theme, open }) => ({
@@ -70,17 +81,34 @@ const drawerWidth = 150;
 
 
 
-
+const pages = ['The Northern Boys', 'Climbing Wolf', 'Tarrytown Apt'];
 
 export function Navbar() {
     const { signOut, session } = useAuth();
     // const [open, setOpen] = useState(false);
-    const [dialOpen, dialSetOpen] = useState(false);
+    // const [dialOpen, dialSetOpen] = useState(false);
+    const [anchorElNav, setAnchorElNav] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
 
     const history = useHistory();
     
-    const handleOpen = () => dialSetOpen(true);
-    const handleClose = () => dialSetOpen(false);
+    // const handleOpen = () => dialSetOpen(true);
+    // const handleClose = () => dialSetOpen(false);
+
+    const handleOpenNavMenu = (event) => {
+      setAnchorElNav(event.currentTarget);
+    };
+    const handleOpenUserMenu = (event) => {
+      setAnchorElUser(event.currentTarget);
+    };
+  
+    const handleCloseNavMenu = () => {
+      setAnchorElNav(null);
+    };
+  
+    const handleCloseUserMenu = () => {
+      setAnchorElUser(null);
+    };
 
     // const toggleDrawer = () => {
     //     setOpen(!open);
@@ -103,9 +131,18 @@ export function Navbar() {
 
     const actions = [
       {
+        icon: <AccountCircleIcon />,
+        name: 'Profile',
+        handleClick: () => {
+          handleCloseUserMenu();
+          history.push('/user-profile');
+        }
+      },
+      {
         icon: <ViewCarouselIcon />,
         name: 'View Decks',
         handleClick: () => {
+          handleCloseUserMenu();
           history.push('/decklist');
         }
       },
@@ -113,6 +150,7 @@ export function Navbar() {
         icon: <AddCardIcon />,
         name: 'Add Deck',
         handleClick: () => {
+          handleCloseUserMenu();
           history.push('/new-deck')
         }
       },
@@ -121,6 +159,7 @@ export function Navbar() {
         name: 'Sign Out',
         handleClick: async () => {
           await signOut();
+          handleCloseUserMenu();
           history.push('/login');
         }
       },
@@ -132,23 +171,101 @@ export function Navbar() {
           position="absolute"
           // open={open}
         >
-            <Toolbar
+            <Container maxWidth="x1">
+              <Toolbar disableGutters>
+                <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} >
+                  <Link to="/" style={{ alignItems: 'center', display: 'inherit', padding: '10px' }}>
+                    <img src={require("./../logo/logo.png")} alt='logo' style={{ height: 60 }}/>
+                  </Link>
+                </Box>
+                <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleOpenNavMenu}
+                    color="inherit"
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorElNav}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}
+                    open={Boolean(anchorElNav)}
+                    onClose={handleCloseNavMenu}
+                    sx={{
+                      display: { xs: 'block', md: 'none' },
+                    }}
+                  >
+                    {pages.map((page) => (
+                      <MenuItem key={page} onClick={handleCloseNavMenu}>
+                        <Typography textAlign="center">{page}</Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
+                <Box sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, flexGrow: 1 }} >
+                  <Link to="/" style={{ alignItems: 'center', display: 'inherit', padding: '10px' }}>
+                    <img src={require("./../logo/logo.png")} alt='logo' style={{ height: 60 }}/>
+                  </Link>
+                </Box>
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                  {pages.map((page) => (
+                    <Button
+                      key={page}
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: 2, color: 'white', display: 'block' }}
+                    >
+                      {page}
+                    </Button>
+                  ))}
+                </Box>
+                <Box sx={{ flexGrow: 0 }}>
+                  <Tooltip title="Open settings">
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: '45px' }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    {actions.map((action) => (
+                      <MenuItem key={action.name} onClick={action.handleClick}>
+                        <Typography textAlign="center">{action.name}</Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
+              </Toolbar>
+            </Container>
+            {/* <Toolbar
                 sx={{
-                pr: '24px', // keep right padding when drawer closed
+                pr: '24px',
                 }}
             >
-                {/* <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                onClick={toggleDrawer}
-                sx={{
-                    marginRight: '36px',
-                    ...(open && { display: 'none' }),
-                }}
-                >
-                <MenuIcon />
-                </IconButton> */}
                 <div
                   component="h1"
                   variant="h5"
@@ -161,15 +278,6 @@ export function Navbar() {
                     </Link>
                 </div>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }} >
-                  <Typography
-                      component="h4"
-                      color="inherit"
-                      noWrap
-                      edge="end"
-                      sx={{ flexGrow: 1 }}
-                  >
-                      {session !== null && session.user !== undefined && session.user.email}
-                  </Typography>
                   <SpeedDial
                     ariaLabel="SpeedDial controlled open example"
                     sx={{ position: 'absolute', top: 15, right: 20 }}
@@ -195,16 +303,8 @@ export function Navbar() {
                   <div>
                     &emsp;&emsp;&emsp;
                   </div>
-                  {/* <Button variant="contained" color="secondary" onClick={handleAddDeck}>+ Deck</Button>
-                  <Button variant="outlined" color="secondary" onClick={handleSignout}>Sign out</Button> */}
                 </div>
-            
-                {/* <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                    <NotificationsIcon />
-                </Badge>
-                </IconButton> */}
-            </Toolbar>
+            </Toolbar> */}
         </AppBar>
         {/* <Drawer variant="permanent" open={true}>
         <Toolbar

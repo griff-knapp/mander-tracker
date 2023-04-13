@@ -1,25 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../../contexts/Auth";
-import { getDecklist } from "../../api/UserQueries";
+import { getUser } from "../../api/UserQueries";
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TableContainer from '@mui/material/TableContainer';
 import { Container, Grid, Paper, Toolbar, Box, Typography } from "@mui/material";
 
-export function Decklist() {
-    const [decklist, setDecklist] = useState(null);
+export function UserProfile() {
+    // const [data, setData] = useState(null);
     const { user } = useAuth();
 
     useEffect(() => {
         const getData = async () => {
-            const decklistData = await getDecklist(user.id);
-            console.log(decklistData);
+            const userData = await getUser(user.email);
+            console.log(userData[0]);
 
-            setDecklist(decklistData.map(deck => ({...deck, created_at: new Date(deck.created_at).toLocaleString()})));
+            // setData(userData[0]);
         }
         if (user !== null) { 
             getData();
@@ -46,6 +40,17 @@ export function Decklist() {
                                 flexDirection: 'column'
                             }}
                         > */}
+                        <Typography variant='h5' sx={{ mb: 0.5 }}>Info</Typography>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                height: 240,
+                            }}
+                            >
+                            
+                        </Paper>
                             {/* <Box
                                 // component="form"
                                 sx={{
@@ -55,27 +60,24 @@ export function Decklist() {
                                 autoComplete="off"
                                 onSubmit={handleSubmit}
                             > */}
-                            <Typography variant='h5' sx={{ mb: 0.5 }}>Your Decklist</Typography>
-                                <TableContainer component={Paper} sx={{ borderColor: '#0B2447' }}>
+                                {/* <TableContainer component={Paper} sx={{ borderColor: '#0B2447' }}>
                                     <Table sx={{ borderColor: '#0B2447' }}>
                                         <TableHead sx={{ borderColor: '#0B2447' }}>
                                             <TableRow sx={{ borderColor: '#0B2447' }}>
                                                 <TableCell sx={{ borderColor: '#102A43', fontSize: '1em' }}>Name</TableCell>
                                                 <TableCell sx={{ borderColor: '#102A43', fontSize: '1em' }}>Commander</TableCell>
-                                                <TableCell sx={{ borderColor: '#102A43', fontSize: '1em' }} align="right">Date Added</TableCell>
                                             </TableRow> 
                                         </TableHead>
                                         <TableBody>
-                                            {decklist !== null && decklist.map(deck => (
+                                            {data !== null && data.decklist.map(deck => (
                                                 <TableRow key={deck.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                                    <TableCell sx={{ borderColor: '#102A43', fontSize: '1.5em', color: '#fff' }} component="th" scope="row">{deck.name}</TableCell>
-                                                    <TableCell sx={{ borderColor: '#102A43', fontSize: '1.5em', color: '#fff' }} component="th" scope="row">{deck.commander}</TableCell>
-                                                    <TableCell align="right" sx={{ borderColor: '#0B2447', fontSize: '1.15em', color: '#fff' }}>{deck.created_at}</TableCell>
+                                                    <TableCell sx={{ borderColor: '#102A43', fontSize: '1.25em', color: '#fff' }} component="th" scope="row">{deck.name}</TableCell>
+                                                    <TableCell sx={{ borderColor: '#102A43', fontSize: '1.25em', color: '#fff' }} component="th" scope="row">{deck.commander}</TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>
                                     </Table>
-                                </TableContainer>
+                                </TableContainer> */}
                             {/* </Box> */}
                         {/* </Paper> */}
                     </Grid>

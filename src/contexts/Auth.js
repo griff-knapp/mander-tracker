@@ -20,6 +20,7 @@ export function AuthProvider({ children }) {
       console.log(session);
       if (session !== null) {
         const userData = await getUser(session.user.email);
+        // console.log(userData[0]);
         setUser(userData[0]);
       }
       return session;

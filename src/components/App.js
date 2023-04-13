@@ -16,6 +16,7 @@ import { Navbar } from "./Navbar";
 import { DetailContainer } from "./Game/DetailContainer";
 import { CreateDeck } from "./Deck/CreateDeck";
 import { Decklist } from "./Deck/Decklist";
+import { UserProfile } from "./Profile/UserProfile";
 
 const mdTheme = createTheme({
   palette: {
@@ -47,6 +48,7 @@ export function App() {
                 <Route path="/game:uuid?" component={DetailContainer} />
                 <Route path="/new-deck" component={CreateDeck} />
                 <Route path="/decklist" component={Decklist} />
+                <Route path="/user-profile" component={UserProfile} />
               </Switch>
             </Box> 
           </ThemeProvider>

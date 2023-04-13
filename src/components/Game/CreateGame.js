@@ -113,7 +113,7 @@ export function CreateGame() {
     }
 
     const formatPlayerData = () => {
-        const formattedArray = playerData.filter(player => playerItems.filter(player2 => player2 === player.name).length > 0).map(player3 => ({info: {name: player3.name, id: player3.id, decklist: player3.decklist}, stats: {}}));
+        const formattedArray = playerData.filter(player => playerItems.filter(player2 => player2 === player.name).length > 0).map(player3 => ({name: player3.name, id: player3.id, decklist: player3.decklist, stats: {}}));
         console.log(formattedArray);
         return formattedArray;
     }

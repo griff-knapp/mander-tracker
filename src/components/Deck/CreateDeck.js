@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Button, Container, Grid, Paper, Toolbar } from "@mui/material";
+import { Button, Container, Grid, Paper, Toolbar, Typography } from "@mui/material";
 import { addDeck } from "../../api/UserQueries";
 import { useAuth } from "../../contexts/Auth";
 import { useHistory } from "react-router-dom";
@@ -82,7 +82,8 @@ export function CreateDeck() {
             <Toolbar />
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4, display: 'flex', flexWrap: 'wrap' }}>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={6} sx={{ flexGrow: 1 }}>
+                        <Typography variant='h5' sx={{ mb: 0.5 }}>Add Deck</Typography>
                         <Paper
                             sx={{
                                 p: 2,

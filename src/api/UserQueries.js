@@ -13,7 +13,7 @@ export async function getUsers() {
 
 export async function getUser(email) {
     const { data: user, error } = await supabase
-        .from('user')
+        .from('getuser')
         .select('*')
         .eq('email', email);
     
