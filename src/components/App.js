@@ -45,7 +45,7 @@ export function App() {
                 <PrivateRoute exact path="/" component={Dashboard} />
                 <Route path="/signup" component={Signup} />
                 <Route path="/login" component={Login} />
-                <Route path="/new-game" component={CreateGame}/>
+                <Route path="/new-game:poduuid?" component={CreateGame}/>
                 <Route path="/game:uuid?" component={DetailContainer} />
                 <Route path="/new-deck" component={CreateDeck} />
                 <Route path="/decklist" component={Decklist} />

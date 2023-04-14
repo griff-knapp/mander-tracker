@@ -42,7 +42,7 @@ export default function GameContainer() {
             try {
               const result = await getGames(uuid);
               console.log(result);
-              if (result !== undefined) {
+              if (result !== undefined && result !== null) {
                 const updatedGameArray = result.map(game => {
                     const gameDate = new Date(game.created_at).toLocaleString();
                     return {
@@ -67,7 +67,7 @@ export default function GameContainer() {
     const history = useHistory();
 
     const handleAddGame = () => {
-        history.push('/new-game');
+        history.push('/new-game:'+uuid.slice(1));
     }
 
     const handleViewGame = (uuid) => {

@@ -10,7 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 // import Typography from '@mui/material/Typography';
 // import Title from './Title';
-import { getUsersByPod } from '../api/UserQueries';
+import { getUsersByPodGame } from '../api/UserQueries';
 import { useParams } from 'react-router-dom';
 
 // const columns = [
@@ -25,11 +25,11 @@ export default function Leaderboard() {
   let { uuid } = useParams();
 
   useEffect(() => {
-    console.log(uuid);
     const getData = async () => {
       try {
-        const users = await getUsersByPod(uuid);
+        const users = await getUsersByPodGame(uuid);
         if (users) {
+          console.log(users);
           const formattedData = formatRows(users);
           setUserData(formattedData);
         }

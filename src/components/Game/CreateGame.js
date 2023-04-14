@@ -12,8 +12,8 @@ import Typography from '@mui/material/Typography';
 // import { TimeField } from '@mui/x-date-pickers/TimeField';
 // import Checkbox from '@mui/material/Checkbox';
 
-import { addGame, getUsers } from "../../api/UserQueries";
-import { GameDetail } from "./GameDetail";
+import { addGame, getUsersByPod } from "../../api/UserQueries";
+import { useParams } from 'react-router-dom';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -49,14 +49,15 @@ export function CreateGame() {
     const [duration, setDuration] = useState('');
     const [funRating, setFunRating] = useState(0);
     const [winner, setWinner] = useState('');
+    let { poduuid } = useParams();
 
     const history = useHistory();
 
     useEffect(() => {
-        // console.log('sup');
+        // console.log(poduuid);
         const getData = async () => {
           try {
-            const users = await getUsers();
+            const users = await getUsersByPod(poduuid);
             if (users) {
               console.log(users);
               setPlayerData(users.map(user => {
@@ -72,7 +73,7 @@ export function CreateGame() {
           }
         }
         getData();
-    },[]);
+    },[poduuid]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -82,7 +83,7 @@ export function CreateGame() {
         const userGameArray = playerItems.map(player => {
             let playerId = null;
             for (const playerInfo in playerData) {
-                console.log(playerInfo)
+                // console.log(playerInfo)
                 if (playerData[playerInfo].name === player) {
                     playerId = playerData[playerInfo].id;
                 }
@@ -104,19 +105,19 @@ export function CreateGame() {
         console.log(userGameArray);
 
         try {
-            const response = await addGame(gameName, playerCount, winnerPlayer, duration, funRating, null, Array(0), userGameArray);
+            const response = await addGame(gameName, playerCount, winnerPlayer, duration, funRating, null, Array(0), userGameArray, poduuid.slice(1));
             console.log(response);
-            history.push('/');
+            history.push('/pod:'+poduuid.slice(1));
         } catch (err) {
             console.log(err);
         }
     }
 
-    const formatPlayerData = () => {
-        const formattedArray = playerData.filter(player => playerItems.filter(player2 => player2 === player.name).length > 0).map(player3 => ({name: player3.name, id: player3.id, decklist: player3.decklist, stats: {}}));
-        console.log(formattedArray);
-        return formattedArray;
-    }
+    // const formatPlayerData = () => {
+    //     const formattedArray = playerData.filter(player => playerItems.filter(player2 => player2 === player.name).length > 0).map(player3 => ({name: player3.name, id: player3.id, decklist: player3.decklist, stats: {}}));
+    //     console.log(formattedArray);
+    //     return formattedArray;
+    // }
     
     return (
         <Box
@@ -131,6 +132,7 @@ export function CreateGame() {
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4, display: 'flex', flexWrap: 'wrap' }}>
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={6}>
+                        <Typography variant='h5' sx={{ mb: 0.5 }}>Add Game</Typography>
                         <Paper
                             sx={{
                                 p: 2,
@@ -152,7 +154,7 @@ export function CreateGame() {
                                         <TextField
                                             id="outlined-name"
                                             label="Name"
-                                            style={{ width: '100%' }}
+                                            style={{ width: '95%' }}
                                             value={gameName}
                                             // inputProps={{ maxlength: '19' }}
                                             onChange={(e) => setGameName(e.target.value)}
@@ -161,7 +163,7 @@ export function CreateGame() {
                                     <Grid item xs={12}>
                                         <TextField
                                             id="outlined-players"
-                                            style={{ width: '100%' }}
+                                            style={{ width: '95%' }}
                                             select
                                             SelectProps={{
                                                 multiple: true,
@@ -190,7 +192,7 @@ export function CreateGame() {
                                         <TextField
                                                 id="outlined-players"
                                                 select
-                                                style={{ width: '100%' }}
+                                                style={{ width: '95%' }}
                                                 SelectProps={{
                                                     MenuProps: MenuProps,
                                                     disabled: playerItems.length === 0,
@@ -211,7 +213,7 @@ export function CreateGame() {
                                     <Grid item xs={12} md={6}>
                                         <TextField
                                             select
-                                            style={{ width: '100%' }}
+                                            style={{ width: '95%' }}
                                             SelectProps={{
                                                 MenuProps: MenuProps
                                             }}
@@ -254,9 +256,9 @@ export function CreateGame() {
                             </Box>
                         </Paper>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    {/* <Grid item xs={12} md={6}>
                         <GameDetail gameName={gameName} gameLength={duration} playerArray={formatPlayerData()} funRating={funRating} winner={winner} newGame={true} />
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </Container>
         </Box>

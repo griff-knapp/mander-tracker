@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 import Leaderboard from './Leaderboard';
 import GameContainer from './GameContainer';
+
 // import { useEffect } from 'react';
 // import { useAuth } from '../contexts/Auth';
 
@@ -31,6 +32,7 @@ export function PodDashboard() {
   // useEffect(() => {
   //   console.log('pod switch');
   // },[]);
+  
 
   return (
         <Box

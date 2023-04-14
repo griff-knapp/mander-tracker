@@ -41,7 +41,7 @@ export function GameDetail(props) {
     // const open = Boolean(anchorEl);
 
     useEffect(() => {
-        console.log(playerArray);
+        // console.log(podUUID.slice(1));
         playerArray.forEach(player => {
             setPlayerDecks(prev => ({...prev, [player.id]: player.decklist.find(deck => deck.did_play === true)?.name || '' }))
         });
@@ -212,7 +212,14 @@ export function GameDetail(props) {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <Button variant="contained" color="secondary" onClick={() => history.push('/')}>Back</Button>
+                        <Button 
+                            variant="contained" 
+                            color="secondary" 
+                            onClick={() => {
+                                // console.log(history);
+                                // history.push(history.location.pathname);
+                                history.goBack();
+                            }}>Back</Button>
                     </Grid>
                 </Grid>
             </Box>

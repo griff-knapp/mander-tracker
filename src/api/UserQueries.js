@@ -22,10 +22,21 @@ export async function getUser(email) {
     return user;
 }
 
-export async function getUsersByPod(podUUID) {
+export async function getUsersByPodGame(podUUID) {
     // console.log(supabase);
     const { data: user, error } = await supabase
         .from('getusers')
+        .select(`*`)
+        .eq('pod_uuid', podUUID.slice(1));
+    if (error) console.log(error);
+    console.log(user);
+    return user;
+}
+
+export async function getUsersByPod(podUUID) {
+    // console.log(supabase);
+    const { data: user, error } = await supabase
+        .from('getusersbypod')
         .select(`*`)
         .eq('pod_uuid', podUUID.slice(1));
     if (error) console.log(error);
@@ -68,7 +79,14 @@ export async function getGame(uuid) {
     return {gameData: dataGame.data[0], winnerData: dataWinner.data[0], playerData: dataPlayers.data};
 }
 
-export async function addGame(name, pcount, winner, duration, fun=null, most_damage=null, knockout_order=Array(0), userGameArray) {
+export async function addGame(name, pcount, winner, duration, fun=null, most_damage=null, knockout_order=Array(0), userGameArray, podRef) {
+    let podId = await supabase
+        .from('pod')
+        .select('id')
+        .eq('uuid', podRef);
+    
+    if (podId.error) console.log(podId.error);
+    console.log(podId);
     let { data, error } = await supabase
         .from('game')
         .insert({ 
@@ -80,7 +98,8 @@ export async function addGame(name, pcount, winner, duration, fun=null, most_dam
                 "fun_meter": fun,
                 "most_damage": most_damage,
                 "knockout_order": knockout_order
-            }
+            },
+            pod_ref: podId.data[0].id
         })
         .select();
     if (error) {

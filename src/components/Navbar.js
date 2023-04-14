@@ -114,6 +114,10 @@ export function Navbar() {
         }
       }
       getData();
+
+      if (localStorage.getItem('activePod') !== null) {
+        setActivePod(localStorage.getItem('activePod'))
+      }
     }, [user]);
 
     
@@ -140,6 +144,7 @@ export function Navbar() {
     const handleCloseNavMenu = (uuid) => {
       handleClickPod(uuid);
       setActivePod(uuid);
+      localStorage.setItem('activePod', uuid);
       setAnchorElNav(null);
     };
   
@@ -194,6 +199,8 @@ export function Navbar() {
         icon: <ExitToAppIcon />,
         name: 'Sign Out',
         handleClick: async () => {
+          setActivePod(null);
+          localStorage.clear();
           await signOut();
           handleCloseUserMenu();
           history.push('/login');
@@ -211,6 +218,7 @@ export function Navbar() {
             setNewPodName('');
             getPodData();
             setActivePod(response[0].uuid);
+            localStorage.setItem('activePod', activePod);
             history.push('/pod:'+response[0].uuid);
           } else {
             setNewPodName('');
@@ -232,7 +240,13 @@ export function Navbar() {
             <Container maxWidth="x1">
               <Toolbar disableGutters>
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} >
-                  <Link to="/" style={{ alignItems: 'center', display: 'inherit', padding: '10px' }}>
+                  <Link
+                    to="/"
+                    style={{ alignItems: 'center', display: 'inherit', padding: '10px' }}
+                    onClick={() => {
+                      localStorage.removeItem('activePod');
+                      setActivePod(null);
+                    }}>
                     <img src={require("./../logo/logo.png")} alt='logo' style={{ height: 60 }}/>
                   </Link>
                 </Box>
@@ -266,7 +280,16 @@ export function Navbar() {
                     }}
                   >
                     {pods !== null && pods.map((pod) => (
-                      <MenuItem key={pod.name} onClick={() => handleCloseNavMenu(pod.uuid)}>
+                      <MenuItem
+                        key={pod.name}
+                        onClick={() => handleCloseNavMenu(pod.uuid)}
+                        style={
+                          activePod !== null && activePod === pod.uuid ?
+                            { backgroundColor: '#9FB3C8', color: 'black' }
+                          :
+                            {  }
+                        }
+                      >
                         <Typography textAlign="center">{pod.name}</Typography>
                       </MenuItem>
                     ))}
