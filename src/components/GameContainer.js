@@ -38,6 +38,7 @@ export default function GameContainer() {
 
     useEffect(() => {
         console.log(uuid);
+        setPage(1);
         const getData = async () => {
             try {
               const result = await getGames(uuid);
