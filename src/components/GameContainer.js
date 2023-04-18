@@ -109,7 +109,7 @@ export default function GameContainer() {
                 </Box>
         }
             {data !== null &&
-                    <Grid container spacing={2.5} sx={{}}>
+                    <Grid container spacing={2.5}>
                         {data.length === 0 &&
                             <Grid item xs={12} lg={4}>
                                 <Card>

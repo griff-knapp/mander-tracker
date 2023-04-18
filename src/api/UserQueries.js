@@ -1,14 +1,22 @@
 import { createClient } from '@supabase/supabase-js'
 const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_PUBLIC_KEY);
 
+// export async function getUsers() {
+//     // console.log(supabase);
+//     const { data: user, error } = await supabase
+//         .from('getusers')
+//         .select(`*`);
+//     if (error) console.log(error);
+//     console.log(user);
+//     return user;
+// }
+
 export async function getUsers() {
-    // console.log(supabase);
-    const { data: user, error } = await supabase
-        .from('getusers')
-        .select(`*`);
+    const { data: userlist, error } = await supabase
+        .from('user')
+        .select('*');
     if (error) console.log(error);
-    console.log(user);
-    return user;
+    return userlist;
 }
 
 export async function getUser(email) {
@@ -226,4 +234,14 @@ export async function createPod(podName, userID) {
         }
     }
     return data;
+}
+
+export async function addUserToPod(podID, userID) {
+    const { error } = await supabase
+        .from('user_pod')
+        .insert({ pod_ref: podID, user_ref: userID, is_admin: false });
+    
+    if (error) return error;
+
+    else return 'success'
 }

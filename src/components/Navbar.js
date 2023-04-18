@@ -118,6 +118,10 @@ export function Navbar() {
       if (localStorage.getItem('activePod') !== null) {
         setActivePod(localStorage.getItem('activePod'))
       }
+
+      return () => {
+        localStorage.removeItem('activePod');
+      }
     }, [user]);
 
     
@@ -142,13 +146,17 @@ export function Navbar() {
     };
   
     const handleCloseNavMenu = (uuid) => {
-      handleClickPod(uuid);
-      setActivePod(uuid);
-      localStorage.setItem('activePod', uuid);
+      if (typeof uuid === 'string') {
+        handleClickPod(uuid);
+        setActivePod(uuid);
+        localStorage.setItem('activePod', uuid);
+      }
       setAnchorElNav(null);
     };
   
     const handleCloseUserMenu = () => {
+      localStorage.removeItem('activePod');
+      setActivePod(null);
       setAnchorElUser(null);
     };
 
@@ -167,7 +175,9 @@ export function Navbar() {
     }
 
     const handleClickPod = (uuid) => {
-      history.push('/pod:'+uuid);
+      if (typeof uuid === 'string') {
+        history.push('/pod:'+uuid);
+      }
     }
 
     const actions = [
@@ -235,6 +245,7 @@ export function Navbar() {
         <>
         <AppBar 
           position="absolute"
+          // sx={{ height: '10%'}}
           // open={open}
         >
             <Container maxWidth="x1">
@@ -296,7 +307,14 @@ export function Navbar() {
                   </Menu>
                 </Box>
                 <Box sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, flexGrow: 1 }} >
-                  <Link to="/" style={{ alignItems: 'center', display: 'inherit', padding: '10px' }}>
+                  <Link 
+                    to="/" 
+                    style={{ alignItems: 'center', display: 'inherit', padding: '10px' }}
+                    onClick={() => {
+                      localStorage.removeItem('activePod');
+                      setActivePod(null);
+                    }}
+                  >
                     <img src={require("./../logo/logo.png")} alt='logo' style={{ height: 60 }}/>
                   </Link>
                 </Box>

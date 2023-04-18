@@ -4,11 +4,11 @@ import Typography from '@mui/material/Typography';
 // import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 // import Link from '@mui/material/Link';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 import Leaderboard from './Leaderboard';
 import GameContainer from './GameContainer';
+import PodMemberListContainer from './PodMemberList/PodMemberListContainer';
 
 // import { useEffect } from 'react';
 // import { useAuth } from '../contexts/Auth';
@@ -65,17 +65,8 @@ export function PodDashboard() {
               </Grid>
               {/* Recent Deposits */}
               <Grid item xs={12} md={4} lg={3}>
-                <Typography variant='h5' sx={{ mb: 0.5 }}>Grand Champ</Typography>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  {/* <Deposits /> */}
-                </Paper>
+                <Typography variant='h5' sx={{ mb: 0.5 }}>Pod Members</Typography>
+                <PodMemberListContainer />
               </Grid>
               {/* Recent Orders */}
               <Grid item xs={12}>
