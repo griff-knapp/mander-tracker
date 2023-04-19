@@ -1,7 +1,7 @@
 import Paper from "@mui/material/Paper";
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { Box, Select, Button } from "@mui/material";
+import { Box, Select, Button, TextField } from "@mui/material";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 // import ListItemText from '@mui/material/ListItemText';
@@ -33,7 +33,7 @@ import { useHistory } from 'react-router';
 // };
 
 export function GameDetail(props) {
-    const { gameName, gameLength, gameID, playerArray, funRating, winner, newGame, gameDate } = props;
+    const { gameName, gameLength, gameID, playerArray, funRating, winner, newGame, gameDate, guestArray } = props;
     const [playerDecks, setPlayerDecks] = useState({});
     const { user } = useAuth();
     const history = useHistory();
@@ -117,10 +117,10 @@ export function GameDetail(props) {
                             onSubmit={handleSubmit}
                         >
                         <List sx={{ bgcolor: 'background.paper', width: '100%' }}>
-                            {playerArray !== undefined && Object.keys(playerDecks).length !== 0 && user && playerArray.map(player => (
+                            {playerArray !== undefined && playerArray !== null && Object.keys(playerDecks).length !== 0 && user && playerArray.map(player => (
                                 <ListItem key={player.name} sx={{ justifyContent: 'flex-start', p: 0, ml: 1, width: '100%', alignItems: 'start', mb: 1.5 }}>
                                     <ListItemAvatar>
-                                        {winner === player.name && 
+                                        {winner !== null && winner === player.name && 
                                             <FontAwesomeIcon style={{ color: 'gold', position: 'absolute', zIndex: '10000', top: -5 }} icon={faCrown} />
                                         } 
                                         <Avatar>
@@ -198,6 +198,34 @@ export function GameDetail(props) {
                                     </div>
                                     
                                     {/* <ListItemText primary={player.info.name} secondary="Commander: " sx={{ width: '25%' }}/> */}
+                                </ListItem>
+                            ))}
+
+                            {guestArray !== undefined && guestArray !== null && user && guestArray.map(guest => (
+                                <ListItem key={guest.name} sx={{ justifyContent: 'flex-start', p: 0, ml: 1, width: '100%', alignItems: 'start', mb: 1.5 }}>
+                                    <ListItemAvatar>
+                                        {winner === null && guest.did_win && 
+                                            <FontAwesomeIcon style={{ color: 'gold', position: 'absolute', zIndex: '10000', top: -5 }} icon={faCrown} />
+                                        } 
+                                        <Avatar>
+                                            <AccountCircleIcon sx={{ fontSize: '2.5rem' }} />
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <div style={{ display: 'block' }}>
+                                        <Typography variant="h5" style={{ marginBottom: 10, fontWeight: 450, width: '200%' }}>
+                                            {guest.name} - Guest
+                                        </Typography>
+                                        {
+                                            !newGame 
+                                            // && 
+                                            // user.id === player.info.id 
+                                        &&
+                                            <TextField
+                                                label='Commander'
+                                                sx={{ width: '110%' }}
+                                            />
+                                        }
+                                    </div>                                    
                                 </ListItem>
                             ))}
                             

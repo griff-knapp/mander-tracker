@@ -8,6 +8,7 @@ import { getGame } from '../../api/UserQueries';
 import { useState } from 'react';
 import { GameDetail } from './GameDetail';
 
+
 export function DetailContainer() {
     const [data, setData] = useState(null);
     let { uuid } = useParams();
@@ -58,9 +59,10 @@ export function DetailContainer() {
                                 gameID={data.gameData.id}
                                 playerArray={data.playerData}
                                 funRating={data.gameData.stats.fun_meter === null ? 0 : data.gameData.stats.fun_meter}
-                                winner={data.winnerData.name}
+                                winner={data.winnerData !== null ? data.winnerData.name : null}
                                 gameDate={new Date(data.gameData.created_at).toLocaleString()}
                                 podUUID={uuid}
+                                guestArray={data.gameData.guestlist}
                             />
                         :   
                             <Box sx={{ display: 'flex', justifyContent: 'center'}}>

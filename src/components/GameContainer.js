@@ -37,7 +37,6 @@ export default function GameContainer() {
     };
 
     useEffect(() => {
-        console.log(uuid);
         setPage(1);
         const getData = async () => {
             try {
@@ -166,7 +165,7 @@ export default function GameContainer() {
                                             </Popover>
                                         }
                                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                            <FontAwesomeIcon style={{ color: 'gold' }} icon={faCrown} />{' '+guy.winner}
+                                            <FontAwesomeIcon style={{ color: 'gold' }} icon={faCrown} />{' '+(guy.winner !== null ? guy.winner : guy.guestlist.find(guest => guest.did_win === true).name + ' - Guest')}
                                         </Typography>
                                         <Typography variant="body2" component="span" sx={{ fontWeight: 'bold'}}>
                                             Players:

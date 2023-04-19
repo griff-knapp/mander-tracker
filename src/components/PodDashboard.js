@@ -27,21 +27,10 @@ import PodMemberListContainer from './PodMemberList/PodMemberListContainer';
 // }
 
 export function PodDashboard() {
-  // const { user } = useAuth();
-  // console.log(user); 
-  // useEffect(() => {
-  //   console.log('pod switch');
-  // },[]);
-  
-
   return (
         <Box
           component="main"
           sx={{
-            // backgroundColor: (theme) =>
-            //   theme.palette.mode === 'dark'
-            //     ? theme.palette.primary
-            //     : '#0B2447',
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
@@ -50,33 +39,20 @@ export function PodDashboard() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>
                 <Typography variant='h5' sx={{ mb: 0.5 }}>Games</Typography>
-                {/* <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }}
-                > */}
-                  <GameContainer />
-                {/* </Paper> */}
+                <GameContainer />
+                <Typography variant='h5' sx={{ mb: 0.5 }}>Leaderboard</Typography>
+                <Leaderboard />
               </Grid>
-              {/* Recent Deposits */}
               <Grid item xs={12} md={4} lg={3}>
                 <Typography variant='h5' sx={{ mb: 0.5 }}>Pod Members</Typography>
                 <PodMemberListContainer />
               </Grid>
-              {/* Recent Orders */}
               <Grid item xs={12}>
-                <Typography variant='h5' sx={{ mb: 0.5 }}>Leaderboard</Typography>
-                {/* <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}> */}
-                  <Leaderboard />
-                {/* </Paper> */}
+                
               </Grid>
             </Grid>
-            {/* <Copyright sx={{ pt: 4 }} /> */}
           </Container>
         </Box>
   )

@@ -106,7 +106,6 @@ export function Navbar() {
         if (user) {
           try {
             const response = await getUserPods(user.id);
-            console.log(response);
             setPods(response);
           } catch (error) {
             console.log(error);
@@ -130,7 +129,6 @@ export function Navbar() {
       if (user) {
         try {
           const response = await getUserPods(user.id);
-          console.log(response);
           setPods(response);
         } catch (error) {
           console.log(error);
@@ -155,8 +153,6 @@ export function Navbar() {
     };
   
     const handleCloseUserMenu = () => {
-      localStorage.removeItem('activePod');
-      setActivePod(null);
       setAnchorElUser(null);
     };
 
@@ -186,6 +182,8 @@ export function Navbar() {
         name: 'Profile',
         handleClick: () => {
           handleCloseUserMenu();
+          localStorage.removeItem('activePod');
+          setActivePod(null);
           history.push('/user-profile');
         }
       },
@@ -194,6 +192,8 @@ export function Navbar() {
         name: 'View Decks',
         handleClick: () => {
           handleCloseUserMenu();
+          localStorage.removeItem('activePod');
+          setActivePod(null);
           history.push('/decklist');
         }
       },
@@ -202,6 +202,8 @@ export function Navbar() {
         name: 'Add Deck',
         handleClick: () => {
           handleCloseUserMenu();
+          localStorage.removeItem('activePod');
+          setActivePod(null);
           history.push('/new-deck')
         }
       },
@@ -222,7 +224,6 @@ export function Navbar() {
       if (newPodName !== '') {
         try {
           const response = await createPod(newPodName, user.id);
-          console.log(response);
           if (response !== null) {
             setEditNewPod(false);
             setNewPodName('');

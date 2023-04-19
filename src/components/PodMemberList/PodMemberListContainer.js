@@ -119,8 +119,8 @@ export default function PodMemberListContainer() {
                 // p: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'start',
-                height: '145px'
+                justifyContent: 'space-between',
+                height: '93%'
                 }}
             >
                 <List sx={{ overflow: 'auto' }}>
@@ -145,24 +145,11 @@ export default function PodMemberListContainer() {
                     }
                     
                 </List>
-            </Paper>
-            {/* <Grid container spacing={2.5} sx={{}}>
-                <Grid item xs={12} lg={4}>
-                    <Card>
-                        <CardActionArea>
-                            <CardContent>
-                                
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                </Grid>
-            </Grid> */}
-            <div style={{ display: 'flex', justifyContent: 'end' }}>
-                {/* <Stack spacing={2} sx={{ marginTop: 2 }}>
-                    <Pagination count={data !== null ? Math.ceil(data.length/3) : 1} page={page} onChange={handleChangePage} />
-                </Stack> */}
+                <div style={{ display: 'block' }}>
                 {!addMember && 
-                    <Button sx={{ marginTop: 2 }} variant='contained' color="secondary" onClick={() => setAddMember(true)}>+ Member</Button>
+                    <div style={{ display: 'flex', justifyContent: 'end', margin: 10, alignItems: 'end' }}>
+                        <Button sx={{ marginTop: 2 }} variant='contained' color="secondary" onClick={() => setAddMember(true)}>+ Member</Button>
+                    </div>
                 }
                 {addMember &&
                     <>
@@ -170,7 +157,7 @@ export default function PodMemberListContainer() {
                             disablePortal
                             id="combo-box-demo"
                             options={userlist}
-                            sx={{ pt: 1, width: '100%' }}
+                            sx={{ pt: 1, m: 1 }}
                             renderInput={(params) => <TextField {...params} label="User" />}
                             value={newMemberValue}
                             onChange={(e, newValue) => {
@@ -180,31 +167,35 @@ export default function PodMemberListContainer() {
                             inputValue={newMemberInput}
                             onInputChange={(e, newValue) => setNewMemberInput(newValue)}
                         />
-                        <Button 
-                            color="secondary" 
-                            variant="outlined" 
-                            sx={{ my: 2, display: 'flex' }}
-                            onClick={handleAddMember}
-                        >
-                            <CheckCircleIcon />
-                        </Button>
-                        <Button
-                            color="secondary"
-                            variant="outlined"
-                            size="small"
-                            sx={{ my: 2, display: 'flex' }}
-                            onClick={() => {
-                                setAddMember(false);
-                                setNewMemberInput('');
-                                setNewMemberValue(null);
-                            }}
-                        >
-                            <CancelIcon />
-                        </Button>
-                    </>
-                    
+                        <div style={{ display: 'flex', justifyContent: 'end', marginRight: '1em', marginTop: -10 }}>
+                            <Button 
+                                color="secondary" 
+                                variant="outlined" 
+                                sx={{ my: 2, display: 'flex' }}
+                                onClick={handleAddMember}
+                            >
+                                <CheckCircleIcon />
+                            </Button>
+                            <Button
+                                color="secondary"
+                                variant="outlined"
+                                size="small"
+                                sx={{ my: 2, display: 'flex' }}
+                                onClick={() => {
+                                    setAddMember(false);
+                                    setNewMemberInput('');
+                                    setNewMemberValue(null);
+                                }}
+                            >
+                                <CancelIcon />
+                            </Button>
+                        </div>
+                        
+                    </>  
                 }
-            </div>
+                </div>
+            </Paper>
+            
         </>
             
     );

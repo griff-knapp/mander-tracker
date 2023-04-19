@@ -48,7 +48,6 @@ export async function getUsersByPod(podUUID) {
         .select(`*`)
         .eq('pod_uuid', podUUID.slice(1));
     if (error) console.log(error);
-    console.log(user);
     return user;
 }
 
@@ -56,7 +55,7 @@ export async function getGames(podUUID) {
     const { data: gameArray, error } = await supabase
         .from('getgames')
         .select('*')
-        .eq('pod_uuid', podUUID.slice(1));
+        .eq('pod_id', podUUID.slice(1));
         if (error) console.log(error);
         return gameArray;
 }
@@ -64,49 +63,52 @@ export async function getGames(podUUID) {
 export async function getGame(uuid) {
     const dataGame = await supabase
         .from('game')
-        .select('id, created_at, name, winner_ref, stats')
+        .select('id, created_at, name, winner_ref, stats, guestlist')
         .eq('uuid', uuid);
 
     if (dataGame.error) console.log(dataGame.error);
-
-    const dataWinner = await supabase
+    
+    let dataWinner = null;
+    if (dataGame.data[0].winner_ref !== null) {
+        dataWinner = await supabase
         .from('user')
         .select('id, name')
         .eq('id', dataGame.data[0].winner_ref);
     
-    if (dataWinner.error) console.log(dataWinner.error);
+        if (dataWinner.error) console.log(dataWinner.error);
+    }
+    
 
     const dataPlayers = await supabase
         .from('getusergames')
         // .select('user_ref, stats, info:user_ref(id, name)')
         .select('*')
         .eq('game_ref', dataGame.data[0].id);
-    console.log(dataPlayers);
     if (dataPlayers.error) console.log(dataPlayers.error);
     
-    return {gameData: dataGame.data[0], winnerData: dataWinner.data[0], playerData: dataPlayers.data};
+    return {gameData: dataGame.data[0], winnerData: (dataWinner !== null ? dataWinner.data[0] : null), playerData: dataPlayers.data};
 }
 
-export async function addGame(name, pcount, winner, duration, fun=null, most_damage=null, knockout_order=Array(0), userGameArray, podRef) {
+export async function addGame(name, pcount, winner, duration, fun=null, most_damage=null, knockout_order=Array(0), userGameArray, podRef, guestArray) {
     let podId = await supabase
         .from('pod')
         .select('id')
         .eq('uuid', podRef);
     
     if (podId.error) console.log(podId.error);
-    console.log(podId);
     let { data, error } = await supabase
         .from('game')
         .insert({ 
             name: name,
             player_count: pcount,
-            winner_ref: winner,
+            winner_ref: (typeof winner !== 'string' ? winner : null),
             stats: {
                 "duration": duration,
                 "fun_meter": fun,
                 "most_damage": most_damage,
                 "knockout_order": knockout_order
             },
+            guestlist: guestArray,
             pod_ref: podId.data[0].id
         })
         .select();
@@ -115,7 +117,6 @@ export async function addGame(name, pcount, winner, duration, fun=null, most_dam
     }
     // console.log(data);
     const gameData = data;
-    console.log(userGameArray);
     userGameArray.forEach(async (entry) => {
         const { error } = await supabase
             .from('user_game')
@@ -129,27 +130,27 @@ export async function addGame(name, pcount, winner, duration, fun=null, most_dam
         }
     });
 
-    const winrateResponse = await supabase
-        .from('user')
-        .select('stats')
-        .eq('id', winner);
+    // const winrateResponse = await supabase
+    //     .from('user')
+    //     .select('stats')
+    //     .eq('id', winner);
 
-    const updateJson = {
-        stats: {
-            ...winrateResponse.data[0].stats,
-            'winrate': winrateResponse.data[0].stats.winrate + 1 
-        }
-    };
+    // const updateJson = {
+    //     stats: {
+    //         ...winrateResponse.data[0].stats,
+    //         'winrate': winrateResponse.data[0].stats.winrate + 1 
+    //     }
+    // };
 
-    const updateWinrateResponse = await supabase
-        .from('user')
-        .update(updateJson)
-        .eq('id', winner)
-        .select('*');
+    // const updateWinrateResponse = await supabase
+    //     .from('user')
+    //     .update(updateJson)
+    //     .eq('id', winner)
+    //     .select('*');
 
-    if (updateWinrateResponse.error) {
-        console.log(updateWinrateResponse.error);
-    }
+    // if (updateWinrateResponse.error) {
+    //     console.log(updateWinrateResponse.error);
+    // }
 }
 
 export async function addUser(name, email) {
@@ -188,7 +189,6 @@ export async function addDeck(name, commander, id) {
 export async function setGameDecks(playerDecks, gameID) {
     Object.keys(playerDecks).forEach(async (playerID) => {
         if (playerDecks[playerID] !== '') {
-            console.log(playerDecks[playerID]);
             const { error } = await supabase
             .from('user_game')
             .update({

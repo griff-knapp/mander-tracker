@@ -9,8 +9,9 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
-// import { TimeField } from '@mui/x-date-pickers/TimeField';
-// import Checkbox from '@mui/material/Checkbox';
+
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import { addGame, getUsersByPod } from "../../api/UserQueries";
 import { useParams } from 'react-router-dom';
@@ -49,6 +50,8 @@ export function CreateGame() {
     const [duration, setDuration] = useState('');
     const [funRating, setFunRating] = useState(0);
     const [winner, setWinner] = useState('');
+    const [toggleAddGuest, setToggleAddGuest] = useState(false);
+    const [guestName, setGuestName] = useState('');
     let { poduuid } = useParams();
 
     const history = useHistory();
@@ -79,17 +82,35 @@ export function CreateGame() {
         e.preventDefault();
 
         const playerCount = playerItems.length;
-        const winnerPlayer = playerData.find(player => player.name === winner).id;
-        const userGameArray = playerItems.map(player => {
+
+        let winnerPlayer = null;
+        const winnerMatch = playerData.find(player => player.name === winner);
+        if (winnerMatch !== undefined) {
+            winnerPlayer = winnerMatch.id;
+        } else {
+            winnerPlayer = playerItems.find(player => player === winner);
+        }
+
+
+        let guestArray = [];
+
+        let userGameArray = playerItems.map(player => {
             let playerId = null;
             for (const playerInfo in playerData) {
-                // console.log(playerInfo)
                 if (playerData[playerInfo].name === player) {
                     playerId = playerData[playerInfo].id;
                 }
             }
 
             console.log(playerId);
+
+            if (playerId === null && typeof player === 'string') {
+                console.log(player + ' is a guest!');
+                const didWin = (typeof winnerPlayer === 'string' && winnerPlayer === player)
+                guestArray = [...guestArray, { name: player, commander: null, did_win: didWin }];
+                console.log(guestArray);
+                return null;
+            }
 
             return {
                 user_ref: playerId,
@@ -101,11 +122,11 @@ export function CreateGame() {
                 }
             }
         });
-
+        userGameArray = userGameArray.filter(ug => ug !== null);
         console.log(userGameArray);
-
+        
         try {
-            const response = await addGame(gameName, playerCount, winnerPlayer, duration, funRating, null, Array(0), userGameArray, poduuid.slice(1));
+            const response = await addGame(gameName, playerCount, winnerPlayer, duration, funRating, null, Array(0), userGameArray, poduuid.slice(1), guestArray);
             console.log(response);
             history.push('/pod:'+poduuid.slice(1));
         } catch (err) {
@@ -188,6 +209,56 @@ export function CreateGame() {
                                             ))}
                                         </TextField>
                                     </Grid>
+                                    {!toggleAddGuest &&
+                                        <Grid item xs={12}>
+                                            <Button variant="outlined" color="secondary" sx={{ ml: 1 }} onClick={() => setToggleAddGuest(true)}>Add Guest</Button>
+                                        </Grid>
+                                    }
+                                    {toggleAddGuest &&
+                                        <>
+                                        <Grid item xs={9}>
+                                            <TextField
+                                                label="Guest Name"
+                                                style={{ width: '95%' }}
+                                                value={guestName}
+                                                // inputProps={{ maxlength: '19' }}
+                                                onChange={(e) => setGuestName(e.target.value)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <div style={{ display: 'flex', justifyContent: 'end' }}>
+                                                <Button 
+                                                    color="secondary" 
+                                                    variant="outlined" 
+                                                    sx={{ my: 2, display: 'flex' }}
+                                                    onClick={() => {
+                                                        if (guestName !== '') {
+                                                            setPlayerItems([...playerItems, guestName]);
+                                                            setToggleAddGuest(false);
+                                                            setGuestName('');
+                                                        }
+                                                    }}
+                                                >
+                                                    <CheckCircleIcon />
+                                                </Button>
+                                                <Button
+                                                    color="secondary"
+                                                    variant="outlined"
+                                                    size="small"
+                                                    sx={{ my: 2, display: 'flex' }}
+                                                    onClick={() => {
+                                                        setToggleAddGuest(false);
+                                                        setGuestName('');
+                                                    }}
+                                                >
+                                                    <CancelIcon />
+                                                </Button>
+                                            </div>
+                                        </Grid>
+                                        </>
+                                        
+                                    }
+                                    
                                     <Grid item xs={12} md={6}>
                                         <TextField
                                                 id="outlined-players"
@@ -248,7 +319,7 @@ export function CreateGame() {
                                         <Rating 
                                             value={funRating}
                                             precision={0.5}
-                                            onChange={(e) => setFunRating(e.target.value)}
+                                            onChange={(e) => setFunRating(+e.target.value)}
                                         />
                                     </Grid>
                                 </Grid>
