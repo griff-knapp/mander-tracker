@@ -18,6 +18,7 @@ import { CreateDeck } from "./Deck/CreateDeck";
 import { Decklist } from "./Deck/Decklist";
 import { UserProfile } from "./Profile/UserProfile";
 import { PodDashboard } from "./PodDashboard";
+// import { Footer } from "./Footer";
 
 const mdTheme = createTheme({
   palette: {
@@ -53,6 +54,7 @@ export function App() {
                 <Route path="/pod:uuid?" component={PodDashboard} />
               </Switch>
             </Box> 
+            {/* <Footer /> */}
           </ThemeProvider>
         </AuthProvider>
       </Router>

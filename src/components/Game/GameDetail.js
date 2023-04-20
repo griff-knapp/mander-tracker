@@ -144,7 +144,8 @@ export function GameDetail(props) {
                                                     handleSubmit(e, player.id);
                                                 }}
                                                 MenuProps={{
-                                                    style: {zIndex: '10001'}
+                                                    style: {zIndex: '10001', color: '#9FB3C8'},
+                                                    PaperProps: { backgroundColor: '#9FB3C8' }
                                                 }}
                                             >
                                                 {player.decklist && player.decklist.map(deck => (

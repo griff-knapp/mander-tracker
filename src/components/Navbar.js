@@ -246,10 +246,8 @@ export function Navbar() {
         <>
         <AppBar 
           position="absolute"
-          // sx={{ height: '10%'}}
-          // open={open}
         >
-            <Container maxWidth="x1">
+            <Container maxWidth="x1" sx={{ overflow: 'hidden' }}>
               <Toolbar disableGutters>
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} >
                   <Link
@@ -396,70 +394,7 @@ export function Navbar() {
                 </Box>
               </Toolbar>
             </Container>
-            {/* <Toolbar
-                sx={{
-                pr: '24px',
-                }}
-            >
-                <div
-                  component="h1"
-                  variant="h5"
-                  color="inherit"
-                  noWrap
-                  style={{ flexGrow: 1, display: 'flex' }}
-                >
-                    <Link to="/" style={{ alignItems: 'center', display: 'inherit', padding: '10px' }}>
-                      <img src={require("./../logo/logo.png")} alt='logo' style={{ height: 60 }}/>
-                    </Link>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }} >
-                  <SpeedDial
-                    ariaLabel="SpeedDial controlled open example"
-                    sx={{ position: 'absolute', top: 15, right: 20 }}
-                    FabProps={{color: 'secondary', size: 'medium'}}
-                    direction='down'
-                    icon={<SpeedDialIcon />}
-                    onClose={handleClose}
-                    onOpen={handleOpen}
-                    open={dialOpen}
-                  >
-                    {actions.map(action => (
-                      <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                        onClick={() => {
-                          handleClose();
-                          action.handleClick();
-                        }}
-                      />
-                    ))}
-                  </SpeedDial>
-                  <div>
-                    &emsp;&emsp;&emsp;
-                  </div>
-                </div>
-            </Toolbar> */}
         </AppBar>
-        {/* <Drawer variant="permanent" open={true}>
-        <Toolbar
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            px: [1],
-          }}
-        >
-          <IconButton onClick={toggleDrawer}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </Toolbar>
-        <Divider />
-        <List component="nav" sx={{ textAlign: 'center' }}>
-          <Typography variant='h6' sx={{ fontWeight: '400' }}>PODS</Typography>
-          <Divider sx={{ my: 1 }} />
-        </List>
-      </Drawer> */} 
       </>
     );
 }
