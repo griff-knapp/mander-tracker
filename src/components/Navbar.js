@@ -245,9 +245,9 @@ export function Navbar() {
     return (
         <>
         <AppBar 
-          position="absolute"
+          // position="absolute"
         >
-            <Container maxWidth="x1" sx={{ overflow: 'hidden' }}>
+            <Container maxWidth="x1" sx={{ overflow: 'hidden', position: 'sticky' }}>
               <Toolbar disableGutters>
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} >
                   <Link
