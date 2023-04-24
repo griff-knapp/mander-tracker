@@ -55,6 +55,7 @@ export function PodDashboard() {
             </Grid>
           </Container>
           <Toolbar />
+          <Toolbar />
         </Box>
   )
 }
