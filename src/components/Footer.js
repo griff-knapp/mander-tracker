@@ -1,14 +1,15 @@
-import { AppBar, Container, Toolbar } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export function Footer() {
     return (
-        <AppBar 
-          
+        <Box 
+          sx={{ width: '100%', position: 'absolute' }}
         >
-            <Container maxWidth={false} sx={{ overflow: 'hidden' }}>
+            <Typography>Hi</Typography>
+            {/* <Container>
                 <Toolbar disableGutters />
-            </Container>
-        </AppBar>
+            </Container> */}
+        </Box>
         
     )
 }

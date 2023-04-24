@@ -18,6 +18,7 @@ import { CreateDeck } from "./Deck/CreateDeck";
 import { Decklist } from "./Deck/Decklist";
 import { UserProfile } from "./Profile/UserProfile";
 import { PodDashboard } from "./PodDashboard";
+import { Layout } from "./Layout";
 // import { Footer } from "./Footer";
 
 const mdTheme = createTheme({
@@ -40,19 +41,21 @@ export function App() {
         <AuthProvider>
           <ThemeProvider theme={mdTheme}>
             <Box sx={{ display: 'flex' }}>
-              <CssBaseline />
-              <Navbar />
-              <Switch>
-                <PrivateRoute exact path="/" component={Dashboard} />
-                <Route path="/signup" component={Signup} />
-                <Route path="/login" component={Login} />
-                <Route path="/new-game:poduuid?" component={CreateGame}/>
-                <Route path="/game:uuid?" component={DetailContainer} />
-                <Route path="/new-deck" component={CreateDeck} />
-                <Route path="/decklist" component={Decklist} />
-                <Route path="/user-profile" component={UserProfile} />
-                <Route path="/pod:uuid?" component={PodDashboard} />
-              </Switch>
+              <Layout>
+              {/* <CssBaseline />
+              <Navbar /> */}
+                <Switch>
+                  <PrivateRoute exact path="/" component={Dashboard} />
+                  <Route path="/signup" component={Signup} />
+                  <Route path="/login" component={Login} />
+                  <Route path="/new-game:poduuid?" component={CreateGame}/>
+                  <Route path="/game:uuid?" component={DetailContainer} />
+                  <Route path="/new-deck" component={CreateDeck} />
+                  <Route path="/decklist" component={Decklist} />
+                  <Route path="/user-profile" component={UserProfile} />
+                  <Route path="/pod:uuid?" component={PodDashboard} />
+                </Switch>
+              </Layout>
             </Box> 
             {/* <Footer /> */}
           </ThemeProvider>
