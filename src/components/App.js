@@ -9,10 +9,10 @@ import { PrivateRoute } from "./PrivateRoute";
 import { CreateGame } from "./Game/CreateGame";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+// import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 
-import { Navbar } from "./Navbar";
+// import { Navbar } from "./Navbar";
 import { DetailContainer } from "./Game/DetailContainer";
 import { CreateDeck } from "./Deck/CreateDeck";
 import { Decklist } from "./Deck/Decklist";
