@@ -113,15 +113,16 @@ export function Navbar() {
         }
       }
       getData();
-
-      if (localStorage.getItem('activePod') !== null) {
+      console.log(history);
+      if (localStorage.getItem('activePod') !== null && history.location.pathname && (history.location.pathname.includes('pod') || history.location.pathname.includes('game'))) {
+        console.log('here');
         setActivePod(localStorage.getItem('activePod'))
       }
 
       return () => {
         localStorage.removeItem('activePod');
       }
-    }, [user]);
+    }, [user, history]);
 
     
 
