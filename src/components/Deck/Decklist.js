@@ -39,22 +39,6 @@ export function Decklist() {
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4, display: 'flex', flexWrap: 'wrap' }}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        {/* <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column'
-                            }}
-                        > */}
-                            {/* <Box
-                                // component="form"
-                                sx={{
-                                    '& .MuiTextField-root': { m: 1, width: '25ch' },
-                                }}
-                                noValidate
-                                autoComplete="off"
-                                onSubmit={handleSubmit}
-                            > */}
                             <Typography variant='h5' sx={{ mb: 0.5 }}>Your Decklist</Typography>
                                 <TableContainer component={Paper} sx={{ borderColor: '#0B2447' }}>
                                     <Table sx={{ borderColor: '#0B2447' }}>
@@ -76,14 +60,12 @@ export function Decklist() {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                            {/* </Box> */}
-                        {/* </Paper> */}
                     </Grid>
                     <Grid item xs={12}>
                         <Button variant="contained" color="secondary">Add Deck</Button>
                     </Grid>
-                </Grid>
-            </Container>
-        </Box>
+             </Grid>
+          </Container>
+         </Box>
     );
 }
