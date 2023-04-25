@@ -36,6 +36,19 @@ export function DetailContainer() {
     //     return formattedArray;
     // }
 
+    const refreshData = async () => {
+        try {
+            // console.log(uuid.slice(1));
+            const response = await getGame(uuid.slice(1));
+            if (response) {
+                // console.log(response);
+                setData(response);
+            }
+        } catch(err) {
+          console.log(err);
+        }
+    }
+
     return (
         <Box
             component="main"
@@ -63,6 +76,7 @@ export function DetailContainer() {
                                 gameDate={new Date(data.gameData.created_at).toLocaleString()}
                                 podUUID={uuid}
                                 guestArray={data.gameData.guestlist}
+                                refreshData={refreshData}
                             />
                         :   
                             <Box sx={{ display: 'flex', justifyContent: 'center'}}>

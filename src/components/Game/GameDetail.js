@@ -1,25 +1,26 @@
 import Paper from "@mui/material/Paper";
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { Box, Select, Button, TextField } from "@mui/material";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import { Box, Button } from "@mui/material";
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
 // import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+// import ListItemAvatar from '@mui/material/ListItemAvatar';
+// import Avatar from '@mui/material/Avatar';
+// import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Rating from '@mui/material/Rating';
 // import Button from '@mui/material/Button';
 // import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+// import MenuItem from '@mui/material/MenuItem';
 // import TextField from '@mui/material/TextField';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCrown } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from "react";
 import { setGameDecks } from "../../api/UserQueries";
 import { useAuth } from "../../contexts/Auth";
 import { useHistory } from 'react-router';
+import { PlayerCard } from "./PlayerCard";
 
 // const ITEM_HEIGHT = 48;
 // const ITEM_PADDING_TOP = 8;
@@ -33,7 +34,7 @@ import { useHistory } from 'react-router';
 // };
 
 export function GameDetail(props) {
-    const { gameName, gameLength, gameID, playerArray, funRating, winner, newGame, gameDate, guestArray } = props;
+    const { gameName, gameLength, gameID, playerArray, funRating, winner, gameDate, guestArray, refreshData } = props;
     const [playerDecks, setPlayerDecks] = useState({});
     const { user } = useAuth();
     const history = useHistory();
@@ -46,7 +47,7 @@ export function GameDetail(props) {
             setPlayerDecks(prev => ({...prev, [player.id]: player.decklist.find(deck => deck.did_play === true)?.name || '' }))
         });
         // console.log(user);
-        // console.log(playerDecks);
+        console.log(playerArray);
         // console.log(gameLengthFormat(gameLength));
     },[playerArray]);
 
@@ -79,10 +80,9 @@ export function GameDetail(props) {
         );
     }
 
-    const handleSubmit = async (e, id) => {
-        e.preventDefault();
+    const handleSubmit = async (deck, id) => {
         console.log(gameID);
-        const submitDecks = {...playerDecks, [`${id}`]: e.target.value};
+        const submitDecks = {...playerDecks, [`${id}`]: deck};
         setPlayerDecks(submitDecks);
         try {
             await setGameDecks(submitDecks, gameID);
@@ -108,131 +108,28 @@ export function GameDetail(props) {
                     <Grid item xs={5} zeroMinWidth>
                         <Typography variant="subtitle1" sx={{ display: 'flex', justifyContent: 'end', fontWeight: 'bold' }}>{gameDate ? gameDate.split(',')[0] : ''}</Typography>
                     </Grid>
-                    <Grid item xs={12} zeroMinWidth>
-                        <Typography component="legend">Players:</Typography>
-                        <Box
+                    {/* <Grid item xs={6} zeroMinWidth> */}
+                        {/* <Typography component="legend">Players:</Typography> */}
+                        {/* <Box
                             component="form"
                             noValidate
                             autoComplete="off"
                             onSubmit={handleSubmit}
-                        >
-                        <List sx={{ bgcolor: 'background.paper', width: '100%' }}>
-                            {playerArray !== undefined && playerArray !== null && Object.keys(playerDecks).length !== 0 && user && playerArray.map(player => (
-                                <ListItem key={player.name} sx={{ justifyContent: 'flex-start', p: 0, ml: 1, width: '100%', alignItems: 'start', mb: 1.5 }}>
-                                    <ListItemAvatar>
-                                        {winner !== null && winner === player.name && 
-                                            <FontAwesomeIcon style={{ color: 'gold', position: 'absolute', zIndex: '10000', top: -5 }} icon={faCrown} />
-                                        } 
-                                        <Avatar>
-                                            <AccountCircleIcon sx={{ fontSize: '2.5rem' }} />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <div style={{ display: 'block', width: '30%' }}>
-                                        <Typography variant="h5" style={{ marginBottom: 10, fontWeight: 450, width: '200%' }}>
-                                            {player.name}
-                                        </Typography>
-                                        {
-                                            !newGame 
-                                            // && 
-                                            // user.id === player.info.id 
-                                        ? 
-                                            <Select
-                                                sx={{ width: '200%' }}
-                                                value={playerDecks[player.id]}
-                                                label='Commander'
-                                                onChange={(e) => {
-                                                    handleSubmit(e, player.id);
-                                                }}
-                                                MenuProps={{
-                                                    style: {zIndex: '10001', color: '#9FB3C8'},
-                                                    PaperProps: { backgroundColor: '#9FB3C8' }
-                                                }}
-                                            >
-                                                {player.decklist && player.decklist.map(deck => (
-                                                    <MenuItem key={deck.name} id={`commander${player.id}`} value={deck.name}>
-                                                        {/* <ListItemText primary={deck.name} id={`commander${player.info.id}`}/> */}
-                                                        {`${deck.name} - ${deck.commander}`}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        :
-                                            (!newGame && user.id !== player.id && player.decklist.find(deck => deck.did_play === true) !== undefined) ?
-                                                <>
-                                                    <Typography sx={{ ml: 1 }} variant="h6">Commander:</Typography>
-                                                    <Typography sx={{ ml: 1 }}>{player.info.decklist.find(deck => deck.did_play === true).name}</Typography>
-                                                </>
-                                                
-                                        :
-                                            null
-                                        }
-                                        
-                                        {/* </TextField> */}
-                                        {/* <Button
-                                            aria-controls={open ? 'basic-menu' : undefined}
-                                            aria-haspopup="true"
-                                            aria-expanded={open ? 'true' : undefined}
-                                            onClick={handleClick}
-                                            color="secondary"
-                                            style={{ marginLeft: '-8px'}}
-                                        >
-                                            Commander:
-                                        </Button>
-                                        <Menu
-                                            id="basic-menu"
-                                            anchorEl={anchorEl}
-                                            open={open}
-                                            onClose={handleClose}
-                                            MenuListProps={{
-                                            'aria-labelledby': 'basic-button',
-                                            }}
-                                        >    */}
-                                            {/* {player.info.decklist.map(deck => {
-                                                <MenuItem>HI</MenuItem>
-                                            })} */}
-
-                                            
-
-                                            {/* <MenuItem onClick={handleClose}>Placeholder</MenuItem> */}
-                                            {/* <MenuItem onClick={handleClose}>My account</MenuItem>
-                                            <MenuItem onClick={handleClose}>Logout</MenuItem> */}
-                                        {/* </Menu> */}
-                                    </div>
-                                    
-                                    {/* <ListItemText primary={player.info.name} secondary="Commander: " sx={{ width: '25%' }}/> */}
-                                </ListItem>
-                            ))}
-
-                            {guestArray !== undefined && guestArray !== null && user && guestArray.map(guest => (
-                                <ListItem key={guest.name} sx={{ justifyContent: 'flex-start', p: 0, ml: 1, width: '100%', alignItems: 'start', mb: 1.5 }}>
-                                    <ListItemAvatar>
-                                        {winner === null && guest.did_win && 
-                                            <FontAwesomeIcon style={{ color: 'gold', position: 'absolute', zIndex: '10000', top: -5 }} icon={faCrown} />
-                                        } 
-                                        <Avatar>
-                                            <AccountCircleIcon sx={{ fontSize: '2.5rem' }} />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <div style={{ display: 'block' }}>
-                                        <Typography variant="h5" style={{ marginBottom: 10, fontWeight: 450, width: '200%' }}>
-                                            {guest.name} - Guest
-                                        </Typography>
-                                        {
-                                            !newGame 
-                                            // && 
-                                            // user.id === player.info.id 
-                                        &&
-                                            <TextField
-                                                label='Commander'
-                                                sx={{ width: '110%' }}
-                                            />
-                                        }
-                                    </div>                                    
-                                </ListItem>
-                            ))}
-                            
-                        </List>
-                        </Box>
-                    </Grid>
+                        > */}
+                        {/* put code back here */}
+                            {/* <PlayerCard /> */}
+                        {/* </Box> */}
+                    {/* </Grid> */}
+                    {playerArray !== undefined && playerArray !== null && Object.keys(playerDecks).length !== 0 && user && playerArray.map(player => (
+                        <Grid item xs={6} zeroMinWidth>
+                            <PlayerCard name={player.name} decklist={player.decklist} winner={winner} playerID={player.id} handleChangeCommander={handleSubmit} refreshData={refreshData} />
+                        </Grid>
+                    ))}
+                    {guestArray !== undefined && guestArray !== null && user && guestArray.map(guest => (
+                        <Grid item xs={6} zeroMinWidth>
+                            <PlayerCard name={guest.name} winner={winner === null && guest.did_win ? guest.name : null} />
+                        </Grid>
+                    ))}
                     <Grid item xs={12} zeroMinWidth>
                         <Rating 
                             value={+funRating}

@@ -113,11 +113,12 @@ export function Navbar() {
         }
       }
       getData();
-      console.log(history);
+      // console.log(activePod);
       if (localStorage.getItem('activePod') !== null && history.location.pathname && (history.location.pathname.includes('pod') || history.location.pathname.includes('game'))) {
         console.log('here');
         setActivePod(localStorage.getItem('activePod'))
       }
+
 
       return () => {
         localStorage.removeItem('activePod');
